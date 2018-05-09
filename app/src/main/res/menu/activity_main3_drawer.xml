@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_light"
+            android:icon="@android:drawable/ic_notification_overlay"
+            android:title="Quản lý đèn" />
+        <item
+            android:id="@+id/nav_fan"
+            android:icon="?android:attr/textSelectHandleRight"
+            android:title="Quản lý quạt" />
+        <item
+            android:id="@+id/nav_camera"
+            android:icon="@android:drawable/presence_video_online"
+            android:title="Quản lý Webcam" />
+        <item
+            android:id="@+id/nav_music"
+            android:icon="@android:drawable/ic_media_play"
+            android:title="Phát nhạc" />
+        <item
+            android:id="@+id/nav_status_info"
+            android:icon="@android:drawable/status_bar_item_background"
+            android:title="Trạng thái" />
+    </group>
+
+    <item android:title="Điều hướng">
+        <menu>
+            <item
+                android:id="@+id/logout"
+                android:icon="@android:drawable/ic_lock_power_off"
+                android:title="Đăng xuất" />
+        </menu>
+    </item>
+
+</menu>

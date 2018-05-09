@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Nhà của tôi</string>
+    <string name="btn_login">Đăng nhập</string>
+    <string name="pass"></string>
+    <string name="email"></string>
+    <string name="textview">Tài khoản</string>
+    <string name="textview1">Mật khẩu</string>
+
+    <string name="title_activity_main">Login to Home</string>
+    <string name="title_activity_main3">Quản lý nhà</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Minh Đức</string>
+    <string name="nav_header_subtitle">duc2521997@gmail.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Refresh</string>
+    <string name="textview4">Đăng nhập</string>
+    <string name="qu_n_l_n">Đang cập nhật dữ liệu ...</string>
+    <string name="tr_ng_th_i"></string>
+    <string name="c_ng_t_c"></string>
+    <string name="n"></string>
+    <string name="textview6">Nhà của tôi - MyHome</string>
+    <string name="textview8">@IndieTeam</string>
+</resources>
