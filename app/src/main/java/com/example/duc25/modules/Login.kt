@@ -3,12 +3,12 @@
 package com.example.duc25.activity
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.AsyncTask
-import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_main.*
+import com.example.duc25.activity.Main3Activity
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStream
@@ -17,19 +17,16 @@ import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
 @SuppressLint("Registered")
-open class Login : AppCompatActivity() {
+class Login(val context: Context){
     var i = 0
 
-
-    fun check_login(){
-        button.setOnClickListener {
-            i++
-            if(i==1) {
-                Toast.makeText(this@Login, "Đang đăng nhập...", Toast.LENGTH_SHORT).show()
-                val uri_api_login: String = "https://techitvn.com/home/api/login.php?username=" + username.getText() + "&password=" + password.getText()
-                ReadContentURL().execute(uri_api_login)
-            }
+    fun checkLogin(username: String, password: String){
+        if(i == 0) {
+            Toast.makeText(context, "Đang đăng nhập...", Toast.LENGTH_SHORT).show()
+            val uriApiLogin = "https://techitvn.com/home/api/login.php?username=$username&password=$password"
+            ReadContentURL().execute(uriApiLogin)
         }
+        i++
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -51,17 +48,17 @@ open class Login : AppCompatActivity() {
                         content.append(line)
                     }
                 } while (line != null)
-                bufferedReader.close()
+                    bufferedReader.close()
             } catch (e: Exception) {
                 Log.d("ERROR", e.message)
             }
             return content.toString()
         }
 
-        fun toActivity(data: String?){
-            val intent = Intent(this@Login,Main3Activity::class.java)
+        private fun toActivity(data: String?){
+            val intent = Intent(context, Main3Activity::class.java)
             intent.putExtra("json", data.toString())
-            startActivity(intent)
+            context.startActivity(intent)
         }
 
         override fun onPostExecute(result: String?) {
@@ -69,12 +66,11 @@ open class Login : AppCompatActivity() {
             val obj = JSONObject(result)
             val status: String = obj.getString("status_login")
             if(status == "true") {
-                Toast.makeText(this@Login,"Đã đăng nhập", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context,"Đã đăng nhập", Toast.LENGTH_SHORT).show()
                 toActivity(result)
-                finish()
             }
             else{
-                Toast.makeText(this@Login,"Sai tên tài khoản hoặc mật khẩu", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context,"Sai tên tài khoản hoặc mật khẩu", Toast.LENGTH_SHORT).show()
                 i = 0
             }
         }
