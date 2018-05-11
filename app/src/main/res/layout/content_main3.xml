@@ -35,7 +35,7 @@
 
 
     <TextView
-        android:id="@+id/light_status"
+        android:id="@+id/light_on_off"
         android:layout_width="100dp"
         android:layout_height="34dp"
         android:layout_marginEnd="6dp"
@@ -47,11 +47,11 @@
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/light_on_off"
+        app:layout_constraintStart_toEndOf="@+id/light_status"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/light_on_off"
+        android:id="@+id/light_status"
         android:layout_width="93dp"
         android:layout_height="31dp"
         android:layout_marginEnd="26dp"
@@ -62,7 +62,7 @@
         android:textColor="@android:color/holo_orange_dark"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/light_status"
+        app:layout_constraintEnd_toStartOf="@+id/light_on_off"
         app:layout_constraintStart_toEndOf="@+id/light_name"
         app:layout_constraintTop_toBottomOf="@+id/light_lable" />
 
@@ -87,7 +87,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/light_on_off" />
+        app:layout_constraintTop_toTopOf="@+id/light_status" />
 
     <!--</LinearLayout>-->
 </android.support.constraint.ConstraintLayout>
