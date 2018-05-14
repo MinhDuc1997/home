@@ -8,7 +8,7 @@ import android.content.Intent
 import android.os.AsyncTask
 import android.util.Log
 import android.widget.Toast
-import com.example.duc25.activity.Main3Activity
+import com.example.duc25.fragment.Loading
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStream
@@ -16,8 +16,9 @@ import java.io.InputStreamReader
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
+
 @SuppressLint("Registered")
-class Login(val context: Context){
+class Login(val context: Context, val supportFragmentManager: android.support.v4.app.FragmentManager){
     var i = 0
 
     fun checkLogin(username: String, password: String){
@@ -25,8 +26,19 @@ class Login(val context: Context){
             Toast.makeText(context, "Đang đăng nhập...", Toast.LENGTH_SHORT).show()
             val uriApiLogin = "https://techitvn.com/home/api/login.php?username=$username&password=$password"
             ReadContentURL().execute(uriApiLogin)
+            startFragment()
         }
         i++
+    }
+
+    fun startFragment(){
+        supportFragmentManager.beginTransaction().add(R.id.rl, Loading(), "loading")
+                .commit()
+    }
+
+    fun removeFragment(){
+        supportFragmentManager.beginTransaction().remove(supportFragmentManager.findFragmentByTag("loading"))
+                .commit()
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -65,6 +77,7 @@ class Login(val context: Context){
             super.onPostExecute(result)
             val obj = JSONObject(result)
             val status: String = obj.getString("status_login")
+            removeFragment()
             if(status == "true") {
                 Toast.makeText(context,"Đã đăng nhập", Toast.LENGTH_SHORT).show()
                 toActivity(result)

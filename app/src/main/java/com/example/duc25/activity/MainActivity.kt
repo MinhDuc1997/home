@@ -17,6 +17,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import com.example.duc25.fragment.Loading
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 import kotlin.concurrent.scheduleAtFixedRate
@@ -45,7 +46,7 @@ open class MainActivity: AppCompatActivity() {
         drawDevName()
         username!!.setText("minhducc")
         password!!.setText("01689470862")
-        loginObj = Login(this)
+        loginObj = Login(this, supportFragmentManager)
         CheckNet().execute("")
     }
 
@@ -95,6 +96,7 @@ open class MainActivity: AppCompatActivity() {
                     }
                 } else {
                     loop = 0
+
                     publishProgress("")
                 }
             }
