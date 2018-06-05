@@ -23,7 +23,7 @@ class Login(val context: Context, val supportFragmentManager: android.support.v4
 
     fun checkLogin(username: String, password: String){
         if(i == 0) {
-            Toast.makeText(context, "Đang đăng nhập...", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(context, "Đang đăng nhập...", Toast.LENGTH_SHORT).show()
             val uriApiLogin = "https://techitvn.com/home/api/login.php?username=$username&password=$password"
             ReadContentURL().execute(uriApiLogin)
             startFragment()
@@ -73,13 +73,20 @@ class Login(val context: Context, val supportFragmentManager: android.support.v4
             context.startActivity(intent)
         }
 
+        private fun saveData(data: String?){
+            val obj = Db(data!!, context)
+            obj.insert()
+            Toast.makeText(context, obj.read(), Toast.LENGTH_SHORT).show()
+        }
+
         override fun onPostExecute(result: String?) {
             super.onPostExecute(result)
             val obj = JSONObject(result)
             val status: String = obj.getString("status_login")
             removeFragment()
             if(status == "true") {
-                Toast.makeText(context,"Đã đăng nhập", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(context,"Đã đăng nhập", Toast.LENGTH_SHORT).show()
+                saveData(result)
                 toActivity(result)
             }
             else{

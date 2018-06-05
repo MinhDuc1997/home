@@ -15,7 +15,7 @@ import android.widget.Toast
  * Created by duc25 on 3/26/2018.
  */
 
-class confimDialog(val myContext: Context): DialogFragment(){
+class Confim(val myContext: Context): DialogFragment(){
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val builder  = AlertDialog.Builder(activity).apply {
@@ -23,6 +23,8 @@ class confimDialog(val myContext: Context): DialogFragment(){
             setMessage("Choose")
 
             setPositiveButton("Agree", {dialog, id ->
+                val obj = Db("", myContext)
+                obj.delete()
                 val intent = Intent(myContext,MainActivity::class.java)
                 startActivity(intent)
                 Toast.makeText(myContext,"Đã đăng xuất", Toast.LENGTH_SHORT).show()

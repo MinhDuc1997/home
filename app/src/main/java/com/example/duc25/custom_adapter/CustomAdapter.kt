@@ -21,7 +21,7 @@ import javax.net.ssl.HttpsURLConnection
  * Created by duc25 on 1/16/2018.
  */
 
-class CustomAdapter (val context: Context, val layout: Int, val array: List<fieldValue>, val lable: String, val token: String): BaseAdapter() {
+class CustomAdapter (val context: Context, val layout: Int, val array: List<FieldValue>, val lable: String, val token: String): BaseAdapter() {
 
     @SuppressLint("ViewHolder")
     override fun getView(p0: Int, p1: View?, p2: ViewGroup?): View {
@@ -29,7 +29,7 @@ class CustomAdapter (val context: Context, val layout: Int, val array: List<fiel
 
         val view: View = layout_dong.inflate(layout,null)
 
-        val arr: fieldValue = array[p0]
+        val arr: FieldValue = array[p0]
 
         view.textView.text = arr.field1
         view.textView5.text = arr.field2
@@ -47,7 +47,8 @@ class CustomAdapter (val context: Context, val layout: Int, val array: List<fiel
                     when(lable){
                         "đèn" -> {requestURL().execute("https://techitvn.com/home/api/remote.php?namedevice=light&id=" + arr.field1 + "&status=1&token=" + token)
                             view.textView5.text = "On"
-                            Toast.makeText(context, "Bật " + lable + " " + arr.field1, Toast.LENGTH_SHORT).show()}
+                            //Toast.makeText(context, "Bật " + lable + " " + arr.field1, Toast.LENGTH_SHORT).show()
+                        }
                         "bài" -> {Toast.makeText(context, "Play " + lable + " " + arr.field1, Toast.LENGTH_SHORT).show();view.textView5.text = "Play"}
                         else -> {
                             view.textView5.text = "On"
@@ -58,7 +59,8 @@ class CustomAdapter (val context: Context, val layout: Int, val array: List<fiel
                     when(lable){
                         "đèn" -> {requestURL().execute("https://techitvn.com/home/api/remote.php?namedevice=light&id=" + arr.field1 + "&status=0&token=" + token)
                             view.textView5.text = "Off"
-                            Toast.makeText(context,"Tắt " + lable + " " + arr.field1, Toast.LENGTH_SHORT).show()}
+                            //Toast.makeText(context,"Tắt " + lable + " " + arr.field1, Toast.LENGTH_SHORT).show()
+                        }
                         "bài" -> {Toast.makeText(context, "Stop " + lable + " " + arr.field1, Toast.LENGTH_SHORT).show();view.textView5.text = "Stop"}
                         else -> {
                             view.textView5.text = "Off"

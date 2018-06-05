@@ -4,6 +4,7 @@ package com.example.duc25.activity
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Point
 import android.graphics.Typeface
@@ -19,6 +20,8 @@ import android.widget.TextView
 import android.widget.Toast
 import com.example.duc25.fragment.Loading
 import kotlinx.android.synthetic.main.activity_main.*
+import org.json.JSONObject
+import java.time.Instant
 import java.util.*
 import kotlin.concurrent.scheduleAtFixedRate
 
@@ -35,6 +38,7 @@ open class MainActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        checkLogined()
         getSizeScreen()
         drawHeader()
         drawLable1()
@@ -48,6 +52,22 @@ open class MainActivity: AppCompatActivity() {
         password!!.setText("01689470862")
         loginObj = Login(this, supportFragmentManager)
         CheckNet().execute("")
+    }
+
+    fun checkLogined(){
+        try {
+            val obj = Db("", this)
+            val result = obj.read()
+            val json = JSONObject(result)
+            val status = json.getString("status_login")
+            if (status == "true") {
+                val intent = Intent(this, Main3Activity::class.java)
+                intent.putExtra("json", json.toString())
+                startActivity(intent)
+            }
+        }catch (e: Exception){
+
+        }
     }
 
     fun event(){

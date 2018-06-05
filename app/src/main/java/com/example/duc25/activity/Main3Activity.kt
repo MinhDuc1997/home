@@ -101,7 +101,7 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
         // as you specify a parent activity in AndroidManifest.xml.
         when (item.itemId) {
             R.id.action_settings -> {
-                Toast.makeText(this@Main3Activity,"Refreshing...", Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this@Main3Activity,"Refreshing...", Toast.LENGTH_SHORT).show()
                 finish()
                 startActivity(intent)
                 return true}
@@ -120,7 +120,7 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
                 list_view.visibility = View.VISIBLE
                 val switchBtn = Switch(this)
 
-                var arrayView = listOf<fieldValue>()
+                var arrayView = listOf<FieldValue>()
                 for(i in 0 until jsonArr.length()) {
                     val idLight = jsonArr.getJSONObject(i).getString("id_light")
                     val status = jsonArr.getJSONObject(i).getString("status")
@@ -130,7 +130,7 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
                     }else{
                         change = "On"
                     }
-                    arrayView += fieldValue(idLight, change, switchBtn)
+                    arrayView += FieldValue(idLight, change, switchBtn)
 
                 }
 
@@ -145,9 +145,9 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
                 val switchBtn = Switch(this)
 
                 val arrayView = listOf(
-                        fieldValue("1","Off", switchBtn),
-                        fieldValue("2","On", switchBtn),
-                        fieldValue("3","On", switchBtn)
+                        FieldValue("1","Off", switchBtn),
+                        FieldValue("2","On", switchBtn),
+                        FieldValue("3","On", switchBtn)
                 )
                 list_view.adapter = CustomAdapter(this, R.layout.field_listview, arrayView, "quạt", token())
                 light_lable.text = "Quản lý quạt"
@@ -160,8 +160,8 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
                 val switchBtn = Switch(this)
 
                 val arrayView = listOf(
-                        fieldValue("1","Off", switchBtn),
-                        fieldValue("2","On", switchBtn)
+                        FieldValue("1","Off", switchBtn),
+                        FieldValue("2","On", switchBtn)
                 )
                 list_view.adapter = CustomAdapter(this, R.layout.field_listview, arrayView, "camera", token())
                 light_lable.text = "Quản lý camera trong nhà"
@@ -174,17 +174,17 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
                 val switchBtn = Switch(this)
 
                 val arrayView = listOf(
-                        fieldValue("Tell me you ...","Play", switchBtn),
-                        fieldValue("Galaxy","Stop", switchBtn),
-                        fieldValue("Mr.Chu","Stop", switchBtn),
-                        fieldValue("Back","Stop", switchBtn),
-                        fieldValue("Fix me","Stop", switchBtn),
-                        fieldValue("Blue","Stop", switchBtn),
-                        fieldValue("Pick me","Stop", switchBtn),
-                        fieldValue("So so","Stop", switchBtn),
-                        fieldValue("First Love","Stop", switchBtn),
-                        fieldValue("Not him","Stop", switchBtn)
-                        )
+                        FieldValue("Tell me you ...","Play", switchBtn),
+                        FieldValue("Galaxy","Stop", switchBtn),
+                        FieldValue("Mr.Chu","Stop", switchBtn),
+                        FieldValue("Back","Stop", switchBtn),
+                        FieldValue("Fix me","Stop", switchBtn),
+                        FieldValue("Blue","Stop", switchBtn),
+                        FieldValue("Pick me","Stop", switchBtn),
+                        FieldValue("So so","Stop", switchBtn),
+                        FieldValue("First Love","Stop", switchBtn),
+                        FieldValue("Not him","Stop", switchBtn)
+                )
                 list_view.adapter = CustomAdapter(this, R.layout.field_listview, arrayView, "bài", token())
                 light_lable.text = "Phát nhạc"
                 light_name.text = "Bài hát"
@@ -207,7 +207,7 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
                 }
             }
             R.id.logout -> {
-                confimDialog(this).show(fragmentManager, "logout")
+                Confim(this).show(fragmentManager, "logout")
             }
         }
 
