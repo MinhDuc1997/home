@@ -1,6 +1,9 @@
 package com.example.duc25.activity
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.graphics.Color
+import android.net.ConnectivityManager
 import android.os.AsyncTask
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -37,16 +40,16 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
         setContentView(R.layout.activity_main3)
         setSupportActionBar(toolbar)
         getDataJson()
-        val toggle = ActionBarDrawerToggle(
-                this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-        drawer_layout.addDrawerListener(toggle)
-        toggle.syncState()
 
-        nav_view.setNavigationItemSelectedListener(this)
 
         val uriApiMyhome: String = "https://techitvn.com/home/api/myhome.php?token=" + token()
 
         ReadContentURL().execute(uriApiMyhome)
+    }
+
+     override fun onPause() {
+        finish()
+        super.onPause()
     }
 
     private fun getDataJson(){
@@ -102,12 +105,10 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
         when (item.itemId) {
             R.id.action_settings -> {
                 //Toast.makeText(this@Main3Activity,"Refreshing...", Toast.LENGTH_SHORT).show()
-                finish()
                 startActivity(intent)
                 return true}
             else -> return super.onOptionsItemSelected(item)
         }
-
     }
 
     @SuppressLint("SetTextI18n")
@@ -216,11 +217,12 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
     }
 
     @SuppressLint("StaticFieldLeak")
-    inner class ReadContentURL : AsyncTask<String, Void, String>() {
+    inner class ReadContentURL : AsyncTask<String, String, String>() {
+        lateinit var content:StringBuilder
 
-        override fun doInBackground(vararg params: String?): String {
-            val content = StringBuilder()
-            val url = URL(params[0])
+        fun getHttp(P0: String){
+            content = StringBuilder()
+            val url = URL(P0)
             val urlConnection: HttpsURLConnection = url.openConnection() as HttpsURLConnection
             val inputStream: InputStream = urlConnection.inputStream
             val inputStreamReader = InputStreamReader(inputStream)
@@ -238,19 +240,42 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
             } catch (e: Exception) {
                 Log.d("ERROR", e.message)
             }
-            return content.toString()
+        }
+
+        override fun doInBackground(vararg params: String): String {
+            val net = baseContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val netInfo = net.activeNetworkInfo
+            if (netInfo != null && netInfo.isConnected) {
+                getHttp(params[0])
+                publishProgress(content.toString())
+            }else{
+                publishProgress("No network")
+            }
+
+            return ""
         }
 
         @SuppressLint("SetTextI18n")
-        override fun onPostExecute(result: String?) {
-            super.onPostExecute(result)
-            val obj = JSONObject(result)
-            val lightStatus: String = obj.getString("light_status")
-            light = obj
-            if(lightStatus != "cannot access") {
-                update = "updated"
-                light_lable.text = "Dữ liệu đã được cập nhật"
-                Toast.makeText(this@Main3Activity, "Đã cập nhật dữ liệu", Toast.LENGTH_SHORT).show()
+        override fun onProgressUpdate(vararg values: String?) {
+            if(values[0] !== "No network") {
+                val toggle = ActionBarDrawerToggle(
+                        this@Main3Activity, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+                drawer_layout.addDrawerListener(toggle)
+                toggle.syncState()
+
+                nav_view.setNavigationItemSelectedListener(this@Main3Activity)
+
+                val obj = JSONObject(values[0])
+                val lightStatus: String = obj.getString("light_status")
+                light = obj
+                if (lightStatus != "cannot access") {
+                    update = "updated"
+                    light_lable.text = "Dữ liệu đã được cập nhật"
+                    //Toast.makeText(this@Main3Activity, "Đã cập nhật dữ liệu", Toast.LENGTH_SHORT).show()
+                }
+            }else{
+                light_lable.text = "Không có kết nối mạng"
+                light_lable.setTextColor(Color.parseColor("#ff0000"))
             }
         }
     }
