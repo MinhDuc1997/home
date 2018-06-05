@@ -76,7 +76,6 @@ class Login(val context: Context, val supportFragmentManager: android.support.v4
         private fun saveData(data: String?){
             val obj = Db(data!!, context)
             obj.insert()
-            Toast.makeText(context, obj.read(), Toast.LENGTH_SHORT).show()
         }
 
         override fun onPostExecute(result: String?) {
