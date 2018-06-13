@@ -44,7 +44,7 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
 
         val uriApiMyhome: String = "https://techitvn.com/home/api/myhome.php?token=" + token()
 
-        ReadContentURL().execute(uriApiMyhome)
+        ReadContentURI().execute(uriApiMyhome)
     }
 
      override fun onPause() {
@@ -135,7 +135,7 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
                 }
 
                 list_view.adapter = CustomAdapter(this, R.layout.field_listview, arrayView, "đèn", token())
-                light_lable.text = "Quản lý đèn"
+                light_lable.text = "Đèn"
                 light_name.text = "Đèn"
                 light_status.text = "Trạng thái"
                 light_on_off.text = "Công tắc"
@@ -150,7 +150,7 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
                         FieldValue("3","On", switchBtn)
                 )
                 list_view.adapter = CustomAdapter(this, R.layout.field_listview, arrayView, "quạt", token())
-                light_lable.text = "Quản lý quạt"
+                light_lable.text = "Quạt"
                 light_name.text = "Quạt"
                 light_status.text = "Trạng thái"
                 light_on_off.text = "Công tắc"
@@ -164,7 +164,7 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
                         FieldValue("2","On", switchBtn)
                 )
                 list_view.adapter = CustomAdapter(this, R.layout.field_listview, arrayView, "camera", token())
-                light_lable.text = "Quản lý camera trong nhà"
+                light_lable.text = "Camera"
                 light_name.text = "Camera"
                 light_status.text = "Trạng thái"
                 light_on_off.text = "Công tắc"
@@ -216,7 +216,7 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
     }
 
     @SuppressLint("StaticFieldLeak")
-    inner class ReadContentURL : AsyncTask<String, String, String>() {
+    inner class ReadContentURI : AsyncTask<String, String, String>() {
         lateinit var content:StringBuilder
 
         fun getHttp(P0: String){
