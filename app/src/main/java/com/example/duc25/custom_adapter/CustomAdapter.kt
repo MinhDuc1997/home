@@ -11,6 +11,7 @@ import android.widget.BaseAdapter
 import android.widget.CompoundButton
 import android.widget.Toast
 import kotlinx.android.synthetic.main.field_listview.view.*
+import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -112,7 +113,13 @@ class CustomAdapter (val context: Context, val layout: Int, val array: List<Fiel
         @SuppressLint("SetTextI18n")
         override fun onPostExecute(result: String?) {
             super.onPostExecute(result)
-            Toast.makeText(context, "Done", Toast.LENGTH_SHORT).show()
+            val jsonObj = JSONObject(result)
+            val status = jsonObj.getString("status")
+            if(status == "true"){
+                Toast.makeText(context, "Done", Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(context, "False", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }

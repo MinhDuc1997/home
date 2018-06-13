@@ -58,7 +58,6 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
         val info: String = jsonObj.getString("user_info")
         val jsonObjInfo = JSONObject(info)
         jsonDataUser = jsonObjInfo
-
     }
 
     private fun token(): String{
@@ -266,9 +265,9 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
                 nav_view.setNavigationItemSelectedListener(this@Main3Activity)
 
                 val obj = JSONObject(values[0])
-                val lightStatus: String = obj.getString("light_status")
+                val token: String = obj.getString("token")
                 light = obj
-                if (lightStatus != "cannot access") {
+                if (token == "true") {
                     update = "updated"
                     light_lable.text = "Dữ liệu đã được cập nhật"
                     //Toast.makeText(this@Main3Activity, "Đã cập nhật dữ liệu", Toast.LENGTH_SHORT).show()
