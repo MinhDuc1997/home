@@ -265,9 +265,9 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
                 nav_view.setNavigationItemSelectedListener(this@Main3Activity)
 
                 val obj = JSONObject(values[0])
-                val token: String = obj.getString("token")
+                val status: String = obj.getString("status")
                 light = obj
-                if (token == "true") {
+                if (status == "true") {
                     update = "updated"
                     light_lable.text = "Dữ liệu đã được cập nhật"
                     //Toast.makeText(this@Main3Activity, "Đã cập nhật dữ liệu", Toast.LENGTH_SHORT).show()
