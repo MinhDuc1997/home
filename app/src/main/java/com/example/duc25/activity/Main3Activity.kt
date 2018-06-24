@@ -47,11 +47,6 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
         ReadContentURI().execute(uriApiMyhome)
     }
 
-     override fun onPause() {
-        finish()
-        super.onPause()
-    }
-
     private fun getDataJson(){
         val jsonUsers = intent.getStringExtra("json")
         val jsonObj = JSONObject(jsonUsers)

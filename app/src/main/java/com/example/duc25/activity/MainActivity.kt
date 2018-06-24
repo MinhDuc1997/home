@@ -11,6 +11,7 @@ import android.graphics.Typeface
 import android.net.ConnectivityManager
 import android.os.AsyncTask
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.support.v7.app.AppCompatActivity
 import android.text.InputType
 import android.view.Gravity
@@ -64,6 +65,7 @@ open class MainActivity: AppCompatActivity() {
                 val intent = Intent(this, Main3Activity::class.java)
                 intent.putExtra("json", json.toString())
                 startActivity(intent)
+                finish()
             }
         }catch (e: Exception){
 
@@ -95,9 +97,8 @@ open class MainActivity: AppCompatActivity() {
         return
     }
 
-    override fun onPause() {
-        finish()
-        super.onPause()
+    override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
+        super.onSaveInstanceState(outState, outPersistentState)
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -229,7 +230,7 @@ open class MainActivity: AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     private fun drawAppName(){
         val appname = TextView(this)
-        appname.text = "Nhà của tôi - MyHome"
+        appname.text = "Nhà"
         appname.textSize = width*1.3f
         appname.typeface = Typeface.DEFAULT_BOLD
         appname.setTextColor(resources.getColor(R.color.colorOrange1))
@@ -242,7 +243,7 @@ open class MainActivity: AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     private fun drawDevName(){
         val devname = TextView(this)
-        devname.text = "@IndieTeam"
+        devname.text = "2018" //"@IndieTeam"
         devname.textSize = width*1f
         devname.typeface = Typeface.DEFAULT_BOLD
         devname.setTextColor(resources.getColor(R.color.colorOrange1))

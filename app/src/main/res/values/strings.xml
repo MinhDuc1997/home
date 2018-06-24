@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Nhà của tôi</string>
+    <string name="app_name">Nhà</string>
     <string name="btn_login">Đăng nhập</string>
     <string name="pass"></string>
     <string name="email"></string>
@@ -7,7 +7,7 @@
     <string name="textview1">Mật khẩu</string>
 
     <string name="title_activity_main">Login to Home</string>
-    <string name="title_activity_main3">Quản lý nhà</string>
+    <string name="title_activity_main3">Nhà</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -20,7 +20,7 @@
     <string name="tr_ng_th_i"></string>
     <string name="c_ng_t_c"></string>
     <string name="n"></string>
-    <string name="textview6">Nhà của tôi - MyHome</string>
+    <string name="textview6">Nhà - MyHome</string>
     <string name="textview8">@IndieTeam</string>
 
     <!-- TODO: Remove or change this placeholder text -->

@@ -15,6 +15,9 @@ import java.io.InputStream
 import java.io.InputStreamReader
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
+import android.app.Activity
+
+
 
 
 @SuppressLint("Registered")
@@ -71,6 +74,7 @@ class Login(val context: Context, val supportFragmentManager: android.support.v4
             val intent = Intent(context, Main3Activity::class.java)
             intent.putExtra("json", data.toString())
             context.startActivity(intent)
+            (context as Activity).finish()
         }
 
         private fun saveData(data: String?){
