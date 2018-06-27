@@ -17,7 +17,7 @@ import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
 class HomeService : Service() {
-
+    var dataJson = ""
     private lateinit var token: String
     private lateinit var uriApiMyhome: String
 
@@ -85,27 +85,31 @@ class HomeService : Service() {
         @SuppressLint("SetTextI18n")
         override fun onProgressUpdate(vararg values: String?) {
             if(values[0] !== "No network") {
-                val obj = JSONObject(values[0])
-                val status: String = obj.getString("status")
-                if (status == "true") {
-                    val jsonObj = JSONObject(values[0])
-                    val jsonArr = jsonObj.getJSONArray("light_status")
-                    var contentNotification = ""
-                    for (i in 0 until jsonArr.length()) {
-                        val id_light = jsonArr.getJSONObject(i).getString("id_light")
-                        val status_light = jsonArr.getJSONObject(i).getString("status")
-                        if (status_light == "0")
-                            contentNotification += "Đèn $id_light: Tắt \n"
-                        else
-                            contentNotification += "Đèn $id_light: Bật \n"
+                if(dataJson != values[0]) {
+                    val obj = JSONObject(values[0])
+                    val status: String = obj.getString("status")
+                    if (status == "true") {
+                        val jsonObj = JSONObject(values[0])
+                        val jsonArr = jsonObj.getJSONArray("light_status")
+                        var contentNotification = ""
+                        for (i in 0 until jsonArr.length()) {
+                            val id_light = jsonArr.getJSONObject(i).getString("id_light")
+                            val status_light = jsonArr.getJSONObject(i).getString("status")
+                            if (status_light == "0")
+                                contentNotification += "Đèn $id_light: Tắt \n"
+                            else
+                                contentNotification += "Đèn $id_light: Bật \n"
+                        }
+                        val notification = HomeNotification(this@HomeService)
+                        notification.createNotificationChannel()
+                        notification.notification(contentNotification)
+
                     }
-                    val notification = HomeNotification(this@HomeService)
-                    notification.createNotificationChannel()
-                    notification.notification(contentNotification)
-                    Handler().postDelayed({
-                        ReadContentURI().execute(uriApiMyhome)
-                    }, 5000)
                 }
+                dataJson = values[0]!!
+                Handler().postDelayed({
+                    ReadContentURI().execute(uriApiMyhome)
+                }, 5000)
             }else{
 
             }
