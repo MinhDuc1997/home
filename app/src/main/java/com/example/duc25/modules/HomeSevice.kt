@@ -9,6 +9,7 @@ import android.os.AsyncTask
 import android.os.Handler
 import android.os.IBinder
 import android.util.Log
+import com.example.duc25.activity.Db
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStream
@@ -34,13 +35,26 @@ class HomeService : Service() {
             token = intent.getStringExtra("content")
             uriApiMyhome = "https://techitvn.com/home/api/myhome.php?token=" + token
             ReadContentURI().execute(uriApiMyhome)
+        }else{
+            uriApiMyhome = "https://techitvn.com/home/api/myhome.php?token=" + token()
+            ReadContentURI().execute(uriApiMyhome)
         }
 
         return START_STICKY
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    fun token(): String{
+        token = ""
+        try {
+            val db = Db("", this)
+            val result = db.read()
+            val json = JSONObject(result)
+            val user_info = json.getString("user_info")
+            token = JSONObject(user_info).getString("token")
+        }catch (e: Exception){
+
+        }
+        return token
     }
 
     @SuppressLint("StaticFieldLeak")
