@@ -37,7 +37,6 @@ class HomeNotification(val context: Context) {
                 .setStyle(NotificationCompat.BigTextStyle().bigText(data))
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent)
-                .setAutoCancel(true)
                 .setOngoing(true)
 
         NotificationManagerCompat.from(context)
