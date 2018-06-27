@@ -1,13 +1,18 @@
 package com.example.duc25.activity
 
 import android.annotation.SuppressLint
+import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.net.ConnectivityManager
 import android.os.AsyncTask
+import android.os.Build
 import android.os.Bundle
+import android.os.IBinder
 import android.support.design.widget.NavigationView
+import android.support.v4.app.NotificationCompat
+import android.support.v4.app.NotificationManagerCompat
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
@@ -17,6 +22,8 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Switch
 import android.widget.Toast
+import com.example.duc25.modules.HomeNotification
+import com.example.duc25.modules.HomeService
 import kotlinx.android.synthetic.main.activity_main3.*
 import kotlinx.android.synthetic.main.app_bar_main3.*
 import kotlinx.android.synthetic.main.content_main3.*
@@ -41,8 +48,6 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
         setContentView(R.layout.activity_main3)
         setSupportActionBar(toolbar)
         getDataJson()
-
-
         val uriApiMyhome: String = "https://techitvn.com/home/api/myhome.php?token=" + token()
 
         ReadContentURI().execute(uriApiMyhome)
@@ -66,14 +71,6 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
         profile_user_name.text = username
         profile_user_email.text = email
     }
-
-//    override fun onBackPressed() {
-//        if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
-//            drawer_layout.closeDrawer(GravityCompat.START)
-//        } else {
-//            super.onBackPressed()
-//        }
-//    }
 
     override fun onBackPressed() {
         closeApp--
@@ -257,13 +254,15 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
                         this@Main3Activity, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
                 drawer_layout.addDrawerListener(toggle)
                 toggle.syncState()
-
                 nav_view.setNavigationItemSelectedListener(this@Main3Activity)
 
                 val obj = JSONObject(values[0])
                 val status: String = obj.getString("status")
                 light = obj
                 if (status == "true") {
+                    val i = Intent(this@Main3Activity, HomeService::class.java)
+                    i.putExtra("content", token())
+                    startService(i)
                     update = "updated"
                     light_lable.text = "Dữ liệu đã được cập nhật"
                     //Toast.makeText(this@Main3Activity, "Đã cập nhật dữ liệu", Toast.LENGTH_SHORT).show()
@@ -274,4 +273,5 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
             }
         }
     }
+
 }
