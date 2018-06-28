@@ -182,7 +182,7 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
                 light_lable.visibility = View.GONE
                 light_name.text = "Bài hát"
                 light_status.text = "Trạng thái"
-                light_on_off.text = "Phát/Dừng"
+                light_on_off.text = "Chơi/Dừng"
                 title = "Chơi nhạc"
             }
             R.id.for_developer -> {

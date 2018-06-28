@@ -7,7 +7,7 @@
         <item
             android:id="@+id/nav_light"
             android:icon="@android:drawable/ic_notification_overlay"
-            android:title="Quản lý đèn" />
+            android:title="Đèn" />
         <!--<item-->
             <!--android:id="@+id/nav_fan"-->
             <!--android:icon="?android:attr/textSelectHandleRight"-->
@@ -19,7 +19,7 @@
         <item
             android:id="@+id/nav_music"
             android:icon="@android:drawable/ic_media_play"
-            android:title="Phát nhạc" />
+            android:title="Chơi nhạc" />
         <item
             android:id="@+id/for_developer"
             android:icon="@android:drawable/status_bar_item_background"
