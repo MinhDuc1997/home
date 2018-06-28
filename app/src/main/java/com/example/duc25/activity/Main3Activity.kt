@@ -3,7 +3,6 @@ package com.example.duc25.activity
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.net.ConnectivityManager
 import android.os.AsyncTask
 import android.os.Bundle
@@ -13,10 +12,8 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.Gravity
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Adapter
 import android.widget.Switch
 import android.widget.Toast
 import com.example.duc25.modules.HomeService
@@ -33,12 +30,12 @@ import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
 
+@Suppress("DEPRECATION")
 open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var jsonDataUser: JSONObject
     lateinit var update: String
     lateinit var light: JSONObject
     private var closeApp = 2
-    private lateinit var adapter: Adapter
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,15 +44,12 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
         setSupportActionBar(toolbar)
         list_view.visibility = View.GONE
         getDataJson()
-
-        val uriApiMyhome: String = "https://techitvn.com/home/api/myhome.php?token=" + token()
+        val uriApiMyhome: String = "https://techitvn.com/home/api/myhome.php?token=" + getToken()
 
         swipeResfresh.setOnRefreshListener {
-            if(list_view.visibility == View.VISIBLE) {
-                startActivity(intent)
-                finish()
-            }
-            swipeResfresh.setRefreshing(false)
+            startActivity(intent)
+            finish()
+            swipeResfresh.isRefreshing = false
         }
 
         ReadContentUri().execute(uriApiMyhome)
@@ -69,11 +63,11 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
         jsonDataUser = jsonObjInfo
     }
 
-    private fun token(): String{
+    private fun getToken(): String{
         return jsonDataUser.getString("token")
     }
 
-    private fun userInfo(){
+    private fun setInfo(){
         val username: String = jsonDataUser.getString("username")
         val email: String = jsonDataUser.getString("email")
         profile_user_name.text = username
@@ -91,21 +85,21 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
         return
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        userInfo()
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.main3, menu)
-        return true
-    }
+//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+//        userInfo()
+//        // Inflate the menu; this adds items to the action bar if it is present.
+//        menuInflater.inflate(R.menu.main3, menu)
+//        return true
+//    }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_settings -> {
-                startActivity(intent)
-                return true}
-            else -> return super.onOptionsItemSelected(item)
-        }
-    }
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        when (item.itemId) {
+//            R.id.action_settings -> {
+//                startActivity(intent)
+//                return true}
+//            else -> return super.onOptionsItemSelected(item)
+//        }
+//    }
 
     @SuppressLint("SetTextI18n")
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -122,17 +116,15 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
                     val idLight = jsonArr.getJSONObject(i).getString("id_light")
                     val status = jsonArr.getJSONObject(i).getString("status")
                     var change: String
-                    if(status == "0"){
-                        change = "Off"
+                    change = if(status == "0"){
+                        "Off"
                     }else{
-                        change = "On"
+                        "On"
                     }
                     arrayView += FieldValue(idLight, change, switchBtn)
 
                 }
-                list_view.adapter = CustomAdapter(this, R.layout.field_listview, arrayView, "đèn", token())
-                adapter = CustomAdapter(this, R.layout.field_listview, arrayView, "đèn", token())
-
+                list_view.adapter = CustomAdapter(this, R.layout.field_listview, arrayView, "đèn", getToken())
                 light_lable.text = "Đèn"
                 light_name.text = "Đèn"
                 light_status.text = "Trạng thái"
@@ -168,7 +160,7 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
                         FieldValue("First Love","Stop", switchBtn),
                         FieldValue("Not him","Stop", switchBtn)
                 )
-                list_view.adapter = CustomAdapter(this, R.layout.field_listview, arrayView, "bài", token())
+                list_view.adapter = CustomAdapter(this, R.layout.field_listview, arrayView, "bài", getToken())
                 light_lable.text = "Phát nhạc"
                 light_name.text = "Bài hát"
                 light_status.text = "Trạng thái"
@@ -203,7 +195,7 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
     inner class ReadContentUri : AsyncTask<String, String, String>() {
         lateinit var content:StringBuilder
 
-        fun getHttp(P0: String){
+        private fun getHttp(P0: String){
             content = StringBuilder()
             val url = URL(P0)
             val urlConnection: HttpsURLConnection = url.openConnection() as HttpsURLConnection
@@ -238,29 +230,30 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
             return ""
         }
 
-        @SuppressLint("SetTextI18n")
+        @SuppressLint("SetTextI18n", "RtlHardcoded")
         override fun onProgressUpdate(vararg values: String?) {
             if(values[0] !== "No network") {
-                val toggle = ActionBarDrawerToggle(
-                        this@Main3Activity, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-                drawer_layout.addDrawerListener(toggle)
-                toggle.syncState()
-                nav_view.setNavigationItemSelectedListener(this@Main3Activity)
-
                 val obj = JSONObject(values[0])
                 val status: String = obj.getString("status")
                 light = obj
                 if (status == "true") {
                     val i = Intent(this@Main3Activity, HomeService::class.java)
-                    i.putExtra("content", token())
+                    i.putExtra("content", getToken())
                     startService(i)
                     update = "updated"
                     light_lable.text = "Dữ liệu đã được cập nhật"
+
+                    val toggle = ActionBarDrawerToggle(
+                            this@Main3Activity, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+                    drawer_layout.addDrawerListener(toggle)
+                    toggle.syncState()
+                    nav_view.setNavigationItemSelectedListener(this@Main3Activity)
+                    drawer_layout.openDrawer(Gravity.LEFT)
+                    setInfo()
                 }
-                drawer_layout.openDrawer(Gravity.LEFT)
             }else{
                 light_lable.text = "Không có kết nối mạng"
-                light_lable.setTextColor(Color.parseColor("#ff0000"))
+                light_lable.setTextColor(resources.getColor(R.color.ColorSecondary))
             }
         }
     }
