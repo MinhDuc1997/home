@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Nhà</string>
+    <string name="app_name">Home</string>
     <string name="btn_login">Đăng nhập</string>
     <string name="pass"></string>
     <string name="email"></string>
@@ -16,13 +16,13 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Refresh</string>
     <string name="textview4">Đăng nhập</string>
-    <string name="qu_n_l_n">Đang cập nhật...</string>
-    <string name="tr_ng_th_i"></string>
-    <string name="c_ng_t_c"></string>
-    <string name="n"></string>
-    <string name="textview6">Nhà - MyHome</string>
-    <string name="textview8">@IndieTeam</string>
-
+    <string name="update_data">Đang cập nhật...</string>
+    <string name="state">trang thai</string>
+    <string name="onoff">cong tac</string>
+    <string name="name">thiet bi</string>
+    <string name="textview6">Home</string>
+    <string name="textview8">IndieTeam</string>
+    <string name="whatnew">* Push notifications \n * New theme \n * Swipe down to refresh \n * Auto open menu</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

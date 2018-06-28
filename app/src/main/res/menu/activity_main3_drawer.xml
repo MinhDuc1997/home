@@ -21,9 +21,14 @@
             android:icon="@android:drawable/ic_media_play"
             android:title="Phát nhạc" />
         <item
-            android:id="@+id/nav_status_info"
+            android:id="@+id/for_developer"
             android:icon="@android:drawable/status_bar_item_background"
-            android:title="Trạng thái" />
+            android:title="For developer" />
+
+        <item
+            android:id="@+id/about"
+            android:icon="@mipmap/about"
+            android:title="About"/>
     </group>
 
     <item android:title="Điều hướng">

@@ -3,6 +3,7 @@ package com.example.duc25.activity
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageInfo
 import android.net.ConnectivityManager
 import android.os.AsyncTask
 import android.os.Bundle
@@ -36,6 +37,8 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
     lateinit var update: String
     lateinit var light: JSONObject
     private var closeApp = 2
+    private lateinit var packageInfo: PackageInfo
+    private lateinit var versionName: String
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,6 +46,9 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
         setContentView(R.layout.activity_main3)
         setSupportActionBar(toolbar)
         list_view.visibility = View.GONE
+        light_name.text = ""
+        light_on_off.text = ""
+        light_status.text = ""
         getDataJson()
         val uriApiMyhome: String = "https://techitvn.com/home/api/myhome.php?token=" + getToken()
 
@@ -125,10 +131,11 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
 
                 }
                 list_view.adapter = CustomAdapter(this, R.layout.field_listview, arrayView, "đèn", getToken())
-                light_lable.text = "Đèn"
+                light_lable.visibility = View.GONE
                 light_name.text = "Đèn"
                 light_status.text = "Trạng thái"
                 light_on_off.text = "Công tắc"
+                title = "Đèn"
             }
 //            R.id.nav_fan -> {
 //                list_view.visibility = View.GONE
@@ -137,13 +144,24 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
 //                light_on_off.text = ""
 //                light_status.text = ""
 //            }
-//            R.id.nav_camera -> {
-//                list_view.visibility = View.GONE
-//                light_lable.text = ""
-//                light_name.text = ""
-//                light_on_off.text = ""
-//                light_status.text = ""
-//            }
+            R.id.about -> {
+                list_view.visibility = View.GONE
+                light_lable.visibility = View.VISIBLE
+                try {
+                    packageInfo = packageManager.getPackageInfo(getPackageName(), 0)
+                    versionName = packageInfo.versionName
+                    light_lable.text = "App Name: " + resources.getString(R.string.app_name) +
+                            "\n Version: $versionName " +
+                            "\n Developer: Nguyen Minh Duc " +
+                            "\n Team: " + resources.getString(R.string.textview8) +
+                            "\n\n What news: \n" + resources.getString(R.string.whatnew)
+                } catch (e: Exception) {
+                }
+                light_name.text = ""
+                light_on_off.text = ""
+                light_status.text = ""
+                title = "About"
+            }
             R.id.nav_music -> {
                 list_view.visibility = View.VISIBLE
                 val switchBtn = Switch(this)
@@ -161,12 +179,13 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
                         FieldValue("Not him","Stop", switchBtn)
                 )
                 list_view.adapter = CustomAdapter(this, R.layout.field_listview, arrayView, "bài", getToken())
-                light_lable.text = "Phát nhạc"
+                light_lable.visibility = View.GONE
                 light_name.text = "Bài hát"
                 light_status.text = "Trạng thái"
-                light_on_off.text = "Play/stop"
+                light_on_off.text = "Phát/Dừng"
+                title = "Chơi nhạc"
             }
-            R.id.nav_status_info -> {
+            R.id.for_developer -> {
                 if(update == "updated") {
                     list_view.visibility = View.GONE
                     light_lable.text = ""
@@ -179,6 +198,9 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
                         val status = jsonArr.getJSONObject(i).getString("status")
                         temp += "id_light: $idLight, status: $status \n"
                     }
+                    title = "Raw Json"
+                    light_lable.visibility = View.VISIBLE
+                    light_lable.text = jsonDataUser.toString() + "\n\n" + light.toString()
                     Toast.makeText(this, temp, Toast.LENGTH_LONG).show()
                 }
             }
@@ -241,6 +263,7 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
                     i.putExtra("content", getToken())
                     startService(i)
                     update = "updated"
+                    light_lable.visibility = View.VISIBLE
                     light_lable.text = "Dữ liệu đã được cập nhật"
 
                     val toggle = ActionBarDrawerToggle(

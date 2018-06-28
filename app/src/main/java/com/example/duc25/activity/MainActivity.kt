@@ -142,7 +142,7 @@ open class MainActivity: AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     private fun drawHeader(){
         val header = TextView(this)
-        header.text = "Đăng nhập"
+        header.text = "Vào nhà"
         header.textSize = width*3
         header.typeface = Typeface.DEFAULT_BOLD
         header.setTextColor(resources.getColor(R.color.ColorSecondary))
@@ -155,7 +155,7 @@ open class MainActivity: AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     private fun drawLable1(){
         val lable1 = TextView(this)
-        lable1.text = "Tài khoản"
+        lable1.text = "Tên người dùng"
         lable1.textSize = width*1.5f
         lable1.typeface = Typeface.DEFAULT_BOLD
         lable1.setTextColor(resources.getColor(R.color.ColorSecondary))
@@ -230,7 +230,7 @@ open class MainActivity: AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     private fun drawAppName(){
         val appname = TextView(this)
-        appname.text = "Nhà"
+        appname.text = "Home"
         appname.textSize = width*1.3f
         appname.typeface = Typeface.DEFAULT_BOLD
         appname.setTextColor(resources.getColor(R.color.ColorSecondary))
