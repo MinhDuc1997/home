@@ -3,6 +3,14 @@
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@color/ColorSecondary</item>
+    </style>
+
+    <style name="switchThemse" parent="AppTheme.NoActionBar">
+        <item name="android:colorControlActivated">@color/ColorSecondary</item>
+    </style>
+    
+    <style name="SplashTheme" parent="AppTheme.NoActionBar">
+        <item name="android:windowBackground">@color/ColorSecondary</item>
     </style>
 </resources>

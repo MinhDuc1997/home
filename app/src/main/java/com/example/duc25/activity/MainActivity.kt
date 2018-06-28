@@ -145,7 +145,7 @@ open class MainActivity: AppCompatActivity() {
         header.text = "Đăng nhập"
         header.textSize = width*3
         header.typeface = Typeface.DEFAULT_BOLD
-        header.setTextColor(resources.getColor(R.color.colorPrimaryDark))
+        header.setTextColor(resources.getColor(R.color.ColorSecondary))
         header.measure(0, 0)
         header.y = height*18
         header.x = width*50 - ((header.measuredWidth)/2)
@@ -158,7 +158,7 @@ open class MainActivity: AppCompatActivity() {
         lable1.text = "Tài khoản"
         lable1.textSize = width*1.5f
         lable1.typeface = Typeface.DEFAULT_BOLD
-        lable1.setTextColor(resources.getColor(R.color.colorPrimaryDark))
+        lable1.setTextColor(resources.getColor(R.color.ColorSecondary))
         lable1.measure(0, 0)
         lable1.y = height*30
         lable1.x = width*50 - ((lable1.measuredWidth)/2)
@@ -171,7 +171,7 @@ open class MainActivity: AppCompatActivity() {
         lable2.text = "Mật khẩu"
         lable2.textSize = width*1.5f
         lable2.typeface = Typeface.DEFAULT_BOLD
-        lable2.setTextColor(resources.getColor(R.color.colorPrimaryDark))
+        lable2.setTextColor(resources.getColor(R.color.ColorSecondary))
         lable2.measure(0, 0)
         lable2.y = height*45
         lable2.x = width*50 - ((lable2.measuredWidth)/2)
@@ -185,7 +185,7 @@ open class MainActivity: AppCompatActivity() {
         userN.setText("minhducc")
         userN.maxLines = 1
         userN.setHorizontallyScrolling(true)
-        userN.setTextColor(resources.getColor(R.color.colorPrimaryDark))
+        userN.setTextColor(resources.getColor(R.color.ColorSecondary))
         userN.gravity = Gravity.CENTER
         userN.width = (width*50).toInt()
         userN.height = (height*7).toInt()
@@ -202,7 +202,7 @@ open class MainActivity: AppCompatActivity() {
         userP.setText("01689470862")
         userP.maxLines = 0
         userP.setHorizontallyScrolling(true)
-        userP.setTextColor(resources.getColor(R.color.colorPrimaryDark))
+        userP.setTextColor(resources.getColor(R.color.ColorSecondary))
         userP.gravity = Gravity.CENTER
         userP.width = (width*50).toInt()
         userP.height = (height*7).toInt()
@@ -218,7 +218,7 @@ open class MainActivity: AppCompatActivity() {
         btn.text = "Bắt đầu"
         btn.textSize = width*1.1f
         btn.setTextColor(Color.WHITE)
-        btn.setBackgroundColor(resources.getColor(R.color.colorPrimaryDark))
+        btn.setBackgroundColor(resources.getColor(R.color.ColorSecondary))
         btn.width = (width*30).toInt()
         btn.height = (height*3).toInt()
         btn.y = height*60
@@ -233,7 +233,7 @@ open class MainActivity: AppCompatActivity() {
         appname.text = "Nhà"
         appname.textSize = width*1.3f
         appname.typeface = Typeface.DEFAULT_BOLD
-        appname.setTextColor(resources.getColor(R.color.colorOrange1))
+        appname.setTextColor(resources.getColor(R.color.ColorSecondary))
         appname.measure(0, 0)
         appname.y = height*87
         appname.x = width*50 - ((appname.measuredWidth)/2)
@@ -243,10 +243,10 @@ open class MainActivity: AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     private fun drawDevName(){
         val devname = TextView(this)
-        devname.text = "2018" //"@IndieTeam"
+        devname.text = "@IndieTeam"
         devname.textSize = width*1f
         devname.typeface = Typeface.DEFAULT_BOLD
-        devname.setTextColor(resources.getColor(R.color.colorOrange1))
+        devname.setTextColor(resources.getColor(R.color.ColorSecondary))
         devname.measure(0, 0)
         devname.y = height*90
         devname.x = width*50 - ((devname.measuredWidth)/2)
