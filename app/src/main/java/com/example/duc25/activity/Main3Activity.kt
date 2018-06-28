@@ -151,7 +151,7 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
                     packageInfo = packageManager.getPackageInfo(getPackageName(), 0)
                     versionName = packageInfo.versionName
                     light_lable.text = "App Name: " + resources.getString(R.string.app_name) +
-                            "\n Version: $versionName " +
+                            "\n Version: $versionName (private beta)" +
                             "\n Developer: Nguyen Minh Duc " +
                             "\n Team: " + resources.getString(R.string.textview8) +
                             "\n\n What news: \n" + resources.getString(R.string.whatnew)
