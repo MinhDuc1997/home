@@ -31,13 +31,8 @@
             android:title="About"/>
     </group>
 
-    <item android:title="Điều hướng">
-        <menu>
-            <item
-                android:id="@+id/logout"
-                android:icon="@android:drawable/ic_lock_power_off"
-                android:title="Đăng xuất" />
-        </menu>
-    </item>
-
+    <item
+        android:id="@+id/logout"
+        android:icon="@android:drawable/ic_lock_power_off"
+        android:title="Đăng xuất" />
 </menu>

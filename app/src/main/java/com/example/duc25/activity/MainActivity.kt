@@ -133,7 +133,7 @@ open class MainActivity: AppCompatActivity() {
                 textView7.setTextColor(Color.parseColor("#ffffff"))
             } else{
                 textView7.text = "Không có kết nối mạng"
-                textView7.setBackgroundColor(Color.parseColor("#ff0000"))
+                textView7.setBackgroundColor(resources.getColor(R.color.ColorSecondary))
                 textView7.setTextColor(Color.parseColor("#ffffff"))
             }
         }
