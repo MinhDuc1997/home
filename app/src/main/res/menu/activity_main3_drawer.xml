@@ -8,14 +8,14 @@
             android:id="@+id/nav_light"
             android:icon="@android:drawable/ic_notification_overlay"
             android:title="Quản lý đèn" />
-        <item
-            android:id="@+id/nav_fan"
-            android:icon="?android:attr/textSelectHandleRight"
-            android:title="Quản lý quạt" />
-        <item
-            android:id="@+id/nav_camera"
-            android:icon="@android:drawable/presence_video_online"
-            android:title="Quản lý Webcam" />
+        <!--<item-->
+            <!--android:id="@+id/nav_fan"-->
+            <!--android:icon="?android:attr/textSelectHandleRight"-->
+            <!--android:title="Quản lý quạt" />-->
+        <!--<item-->
+            <!--android:id="@+id/nav_camera"-->
+            <!--android:icon="@android:drawable/presence_video_online"-->
+            <!--android:title="Quản lý Webcam" />-->
         <item
             android:id="@+id/nav_music"
             android:icon="@android:drawable/ic_media_play"

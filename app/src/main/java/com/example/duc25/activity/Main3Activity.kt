@@ -1,32 +1,29 @@
 package com.example.duc25.activity
 
 import android.annotation.SuppressLint
-import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.net.ConnectivityManager
 import android.os.AsyncTask
-import android.os.Build
 import android.os.Bundle
-import android.os.IBinder
 import android.support.design.widget.NavigationView
-import android.support.v4.app.NotificationCompat
-import android.support.v4.app.NotificationManagerCompat
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Adapter
 import android.widget.Switch
 import android.widget.Toast
-import com.example.duc25.modules.HomeNotification
 import com.example.duc25.modules.HomeService
 import kotlinx.android.synthetic.main.activity_main3.*
 import kotlinx.android.synthetic.main.app_bar_main3.*
 import kotlinx.android.synthetic.main.content_main3.*
+import kotlinx.android.synthetic.main.listview.*
 import kotlinx.android.synthetic.main.nav_header_main3.*
 import org.json.JSONObject
 import java.io.BufferedReader
@@ -41,16 +38,27 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
     lateinit var update: String
     lateinit var light: JSONObject
     private var closeApp = 2
+    private lateinit var adapter: Adapter
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main3)
         setSupportActionBar(toolbar)
+        list_view.visibility = View.GONE
         getDataJson()
+
         val uriApiMyhome: String = "https://techitvn.com/home/api/myhome.php?token=" + token()
 
-        ReadContentURI().execute(uriApiMyhome)
+        swipeResfresh.setOnRefreshListener {
+            if(list_view.visibility == View.VISIBLE) {
+                startActivity(intent)
+                finish()
+            }
+            swipeResfresh.setRefreshing(false)
+        }
+
+        ReadContentUri().execute(uriApiMyhome)
     }
 
     private fun getDataJson(){
@@ -91,12 +99,8 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         when (item.itemId) {
             R.id.action_settings -> {
-                //Toast.makeText(this@Main3Activity,"Refreshing...", Toast.LENGTH_SHORT).show()
                 startActivity(intent)
                 return true}
             else -> return super.onOptionsItemSelected(item)
@@ -126,42 +130,28 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
                     arrayView += FieldValue(idLight, change, switchBtn)
 
                 }
-
                 list_view.adapter = CustomAdapter(this, R.layout.field_listview, arrayView, "đèn", token())
+                adapter = CustomAdapter(this, R.layout.field_listview, arrayView, "đèn", token())
+
                 light_lable.text = "Đèn"
                 light_name.text = "Đèn"
                 light_status.text = "Trạng thái"
                 light_on_off.text = "Công tắc"
             }
-            R.id.nav_fan -> {
-                list_view.visibility = View.VISIBLE
-                val switchBtn = Switch(this)
-
-                val arrayView = listOf(
-                        FieldValue("1","Off", switchBtn),
-                        FieldValue("2","On", switchBtn),
-                        FieldValue("3","On", switchBtn)
-                )
-                list_view.adapter = CustomAdapter(this, R.layout.field_listview, arrayView, "quạt", token())
-                light_lable.text = "Quạt"
-                light_name.text = "Quạt"
-                light_status.text = "Trạng thái"
-                light_on_off.text = "Công tắc"
-            }
-            R.id.nav_camera -> {
-                list_view.visibility = View.VISIBLE
-                val switchBtn = Switch(this)
-
-                val arrayView = listOf(
-                        FieldValue("1","Off", switchBtn),
-                        FieldValue("2","On", switchBtn)
-                )
-                list_view.adapter = CustomAdapter(this, R.layout.field_listview, arrayView, "camera", token())
-                light_lable.text = "Camera"
-                light_name.text = "Camera"
-                light_status.text = "Trạng thái"
-                light_on_off.text = "Công tắc"
-            }
+//            R.id.nav_fan -> {
+//                list_view.visibility = View.GONE
+//                light_lable.text = ""
+//                light_name.text = ""
+//                light_on_off.text = ""
+//                light_status.text = ""
+//            }
+//            R.id.nav_camera -> {
+//                list_view.visibility = View.GONE
+//                light_lable.text = ""
+//                light_name.text = ""
+//                light_on_off.text = ""
+//                light_status.text = ""
+//            }
             R.id.nav_music -> {
                 list_view.visibility = View.VISIBLE
                 val switchBtn = Switch(this)
@@ -187,16 +177,17 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
             R.id.nav_status_info -> {
                 if(update == "updated") {
                     list_view.visibility = View.GONE
+                    light_lable.text = ""
                     light_name.text = ""
-                    light_status.text = ""
                     light_on_off.text = ""
+                    light_status.text = ""
                     var temp = ""
                     for(i in 0 until jsonArr.length()) {
                         val idLight = jsonArr.getJSONObject(i).getString("id_light")
                         val status = jsonArr.getJSONObject(i).getString("status")
                         temp += "id_light: $idLight, status: $status \n"
                     }
-                    light_lable.text = temp
+                    Toast.makeText(this, temp, Toast.LENGTH_LONG).show()
                 }
             }
             R.id.logout -> {
@@ -209,7 +200,7 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
     }
 
     @SuppressLint("StaticFieldLeak")
-    inner class ReadContentURI : AsyncTask<String, String, String>() {
+    inner class ReadContentUri : AsyncTask<String, String, String>() {
         lateinit var content:StringBuilder
 
         fun getHttp(P0: String){
@@ -265,8 +256,8 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
                     startService(i)
                     update = "updated"
                     light_lable.text = "Dữ liệu đã được cập nhật"
-                    //Toast.makeText(this@Main3Activity, "Đã cập nhật dữ liệu", Toast.LENGTH_SHORT).show()
                 }
+                drawer_layout.openDrawer(Gravity.LEFT)
             }else{
                 light_lable.text = "Không có kết nối mạng"
                 light_lable.setTextColor(Color.parseColor("#ff0000"))
