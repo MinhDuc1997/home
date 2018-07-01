@@ -53,9 +53,9 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
         val uriApiMyhome: String = "https://techitvn.com/home/api/myhome.php?token=" + getToken()
 
         swipeResfresh.setOnRefreshListener {
+            swipeResfresh.isRefreshing = false
             startActivity(intent)
             finish()
-            swipeResfresh.isRefreshing = false
         }
 
         ReadContentUri().execute(uriApiMyhome)
@@ -91,22 +91,6 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
         return
     }
 
-//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-//        userInfo()
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        menuInflater.inflate(R.menu.main3, menu)
-//        return true
-//    }
-
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        when (item.itemId) {
-//            R.id.action_settings -> {
-//                startActivity(intent)
-//                return true}
-//            else -> return super.onOptionsItemSelected(item)
-//        }
-//    }
-
     @SuppressLint("SetTextI18n")
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
@@ -137,13 +121,6 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
                 light_on_off.text = "Công tắc"
                 title = "Đèn"
             }
-//            R.id.nav_fan -> {
-//                list_view.visibility = View.GONE
-//                light_lable.text = ""
-//                light_name.text = ""
-//                light_on_off.text = ""
-//                light_status.text = ""
-//            }
             R.id.about -> {
                 list_view.visibility = View.GONE
                 light_lable.visibility = View.VISIBLE
@@ -215,46 +192,62 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
 
     @SuppressLint("StaticFieldLeak")
     inner class ReadContentUri : AsyncTask<String, String, String>() {
-        lateinit var content:StringBuilder
+        lateinit var content: StringBuilder
 
         private fun getHttp(P0: String){
-            content = StringBuilder()
-            val url = URL(P0)
-            val urlConnection: HttpsURLConnection = url.openConnection() as HttpsURLConnection
-            val inputStream: InputStream = urlConnection.inputStream
-            val inputStreamReader = InputStreamReader(inputStream)
-            val bufferedReader = BufferedReader(inputStreamReader)
-
-            var line: String?
             try {
-                do {
-                    line = bufferedReader.readLine()
-                    if (line != null) {
-                        content.append(line)
-                    }
-                } while (line != null)
-                bufferedReader.close()
-            } catch (e: Exception) {
-                Log.d("ERROR", e.message)
-            }
+                content = StringBuilder()
+                val url = URL(P0)
+                val urlConnection = url.openConnection() as HttpsURLConnection
+                urlConnection.useCaches = false
+                val inputStream = urlConnection.inputStream
+                val inputStreamReader = InputStreamReader(inputStream)
+                val bufferedReader = BufferedReader(inputStreamReader)
+
+                var line: String?
+                try {
+                    do {
+                        line = bufferedReader.readLine()
+                        if (line != null) {
+                            content.append(line)
+                        }
+                    } while (line != null)
+                    bufferedReader.close()
+                } catch (e: Exception) {
+                    Log.d("ERROR", e.message)
+                }
+            }catch (e: Exception){}
         }
 
         override fun doInBackground(vararg params: String): String {
             val net = baseContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             val netInfo = net.activeNetworkInfo
-            if (netInfo != null && netInfo.isConnected) {
-                getHttp(params[0])
-                publishProgress(content.toString())
-            }else{
+            if(netInfo != null && netInfo.isConnected) {
+                when (netInfo.type) {
+                    ConnectivityManager.TYPE_WIFI -> {
+                        getHttp(params[0])
+                        if(content.toString().isNotBlank())
+                            publishProgress(content.toString())
+                        else
+                            publishProgress("Error network")
+                    }
+                    ConnectivityManager.TYPE_MOBILE -> {
+                        getHttp(params[0])
+                        if(content.toString().isNotBlank())
+                            publishProgress(content.toString())
+                        else
+                            publishProgress("Error network")
+                    }
+                    else -> publishProgress("Error network")
+                }
+            }else
                 publishProgress("No network")
-            }
-
             return ""
         }
 
         @SuppressLint("SetTextI18n", "RtlHardcoded")
         override fun onProgressUpdate(vararg values: String?) {
-            if(values[0] !== "No network") {
+            if(values[0] !== "No network" && values[0] !== "Error network" && values[0] != null) {
                 val obj = JSONObject(values[0])
                 val status: String = obj.getString("status")
                 light = obj
@@ -274,8 +267,11 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
                     drawer_layout.openDrawer(Gravity.LEFT)
                     setInfo()
                 }
-            }else{
+            }else if (values[0] == "No network"){
                 light_lable.text = "Không có kết nối mạng"
+                light_lable.setTextColor(resources.getColor(R.color.ColorSecondary))
+            }else{
+                light_lable.text = "Lỗi mạng"
                 light_lable.setTextColor(resources.getColor(R.color.ColorSecondary))
             }
         }

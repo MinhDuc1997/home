@@ -45,55 +45,69 @@ class Login(val context: Context, val supportFragmentManager: android.support.v4
     }
 
     @SuppressLint("StaticFieldLeak")
-    inner class ReadContentURL : AsyncTask<String, Void, String>() {
-
-        override fun doInBackground(vararg params: String?): String {
-            val content = StringBuilder()
-            val url = URL(params[0])
-            val urlConnection: HttpsURLConnection = url.openConnection() as HttpsURLConnection
-            val inputStream: InputStream = urlConnection.inputStream
-            val inputStreamReader = InputStreamReader(inputStream)
-            val bufferedReader = BufferedReader(inputStreamReader)
-
-            var line: String?
+    inner class ReadContentURL : AsyncTask<String, String, String>() {
+        lateinit var content: StringBuilder
+        fun getHttp(P0: String){
             try {
-                do {
-                    line = bufferedReader.readLine()
-                    if (line != null) {
-                        content.append(line)
-                    }
-                } while (line != null)
+                content = StringBuilder()
+                val url = URL(P0)
+                val urlConnection: HttpsURLConnection = url.openConnection() as HttpsURLConnection
+                val inputStream: InputStream = urlConnection.inputStream
+                val inputStreamReader = InputStreamReader(inputStream)
+                val bufferedReader = BufferedReader(inputStreamReader)
+
+                var line: String?
+                try {
+                    do {
+                        line = bufferedReader.readLine()
+                        if (line != null) {
+                            content.append(line)
+                        }
+                    } while (line != null)
                     bufferedReader.close()
-            } catch (e: Exception) {
-                Log.d("ERROR", e.message)
-            }
-            return content.toString()
+                } catch (e: Exception) {
+                    Log.d("ERROR", e.message)
+                }
+            }catch (e: Exception){}
         }
 
-        private fun toActivity(data: String?){
+        private fun toActivity(data: String){
             val intent = Intent(context, Main3Activity::class.java)
-            intent.putExtra("json", data.toString())
+            intent.putExtra("json", data)
             context.startActivity(intent)
             (context as Activity).finish()
         }
 
-        private fun saveData(data: String?){
-            val obj = Db(data!!, context)
+        private fun saveData(data: String){
+            val obj = Db(data, context)
             obj.insert()
         }
 
-        override fun onPostExecute(result: String?) {
-            super.onPostExecute(result)
-            val obj = JSONObject(result)
-            val status: String = obj.getString("status_login")
-            removeFragment()
-            if(status == "true") {
-                //Toast.makeText(context,"Đã đăng nhập", Toast.LENGTH_SHORT).show()
-                saveData(result)
-                toActivity(result)
-            }
-            else{
-                Toast.makeText(context,"Sai tên tài khoản hoặc mật khẩu", Toast.LENGTH_SHORT).show()
+        override fun doInBackground(vararg params: String): String {
+            getHttp(params[0])
+            if(content.toString().isNotBlank())
+                publishProgress("")
+            else
+                publishProgress("Error network")
+            return ""
+        }
+
+        override fun onProgressUpdate(vararg values: String) {
+            super.onProgressUpdate(*values)
+            if(values[0] !== "Error network") {
+                val obj = JSONObject(content.toString())
+                val status: String = obj.getString("status_login")
+                removeFragment()
+                if (status == "true") {
+                    saveData(content.toString())
+                    toActivity(content.toString())
+                } else {
+                    Toast.makeText(context, "Sai tên tài khoản hoặc mật khẩu", Toast.LENGTH_SHORT).show()
+                    i = 0
+                }
+            }else {
+                removeFragment()
+                Toast.makeText(context, "Lỗi mạng", Toast.LENGTH_SHORT).show()
                 i = 0
             }
         }

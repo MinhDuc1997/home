@@ -64,8 +64,9 @@ class HomeService : Service() {
         fun getHttp(P0: String){
             content = StringBuilder()
             val url = URL(P0)
-            val urlConnection: HttpsURLConnection = url.openConnection() as HttpsURLConnection
-            val inputStream: InputStream = urlConnection.inputStream
+            val urlConnection = url.openConnection() as HttpsURLConnection
+            urlConnection.useCaches = false
+            val inputStream = urlConnection.inputStream
             val inputStreamReader = InputStreamReader(inputStream)
             val bufferedReader = BufferedReader(inputStreamReader)
 
