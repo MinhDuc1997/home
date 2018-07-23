@@ -1,15 +1,20 @@
 package com.example.duc25.activity
 
 import android.annotation.SuppressLint
+import android.app.ActionBar
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
+import android.graphics.Typeface
 import android.os.AsyncTask
+import android.support.v4.graphics.drawable.DrawableCompat
+import android.text.Layout
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.CompoundButton
-import android.widget.Toast
+import android.widget.*
+import com.example.duc25.config.UriApi
 import kotlinx.android.synthetic.main.field_listview.view.*
 import org.json.JSONObject
 import java.io.BufferedReader
@@ -22,7 +27,7 @@ import javax.net.ssl.HttpsURLConnection
  * Created by duc25 on 1/16/2018.
  */
 
-class CustomAdapter (val context: Context, val layout: Int, val array: List<FieldValue>, val lable: String, val token: String): BaseAdapter() {
+class CustomAdapter (val context: Main3Activity, val layout: Int, val array: List<FieldValue>, val lable: String, val token: String): BaseAdapter() {
 
     @SuppressLint("ViewHolder")
     override fun getView(p0: Int, p1: View?, p2: ViewGroup?): View {
@@ -32,39 +37,79 @@ class CustomAdapter (val context: Context, val layout: Int, val array: List<Fiel
 
         val arr: FieldValue = array[p0]
 
-        view.textView.text = arr.field1
-        view.textView5.text = arr.field2
+        val textView = TextView(context)
+        val textView5 = TextView(context)
+        val switch1 = Switch(context)
 
-        if(view.textView5.text == "On" || view.textView5.text == "Play"){
-            view.switch1.isChecked = true
+        textView.text = arr.field1
+        textView5.text = arr.field2
+
+        textView.textSize = 18f
+        textView5.textSize = 18f
+
+        textView.typeface = Typeface.DEFAULT_BOLD
+        textView5.typeface = Typeface.DEFAULT_BOLD
+
+        switch1.showText = false
+
+        textView.measure(0,0)
+        textView5.measure(0,0)
+        switch1.measure(0, 0)
+
+        view.rl_value.addView(textView)
+        view.rl_value.addView(textView5)
+        view.rl_value.addView(switch1)
+
+        textView.x = context.width*5
+        textView5.x = context.width*50 - textView5.measuredWidth/2
+        switch1.x = context.width*100 - switch1.measuredWidth - context.width*5
+
+        val states = arrayOf(intArrayOf(-android.R.attr.state_checked), intArrayOf(android.R.attr.state_checked))
+
+        val thumbColors = intArrayOf(Color.GRAY, Color.parseColor("#fdc51162"))
+        val trackColors = intArrayOf(Color.GRAY, Color.parseColor("#fdc51162"))
+        DrawableCompat.setTintList(DrawableCompat.wrap(switch1.thumbDrawable), ColorStateList(states, thumbColors))
+        DrawableCompat.setTintList(DrawableCompat.wrap(switch1.trackDrawable), ColorStateList(states, trackColors))
+
+        val params = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT)
+        params.setMargins(0, (context.height*2).toInt(), 0, 0)
+        params.width = textView.measuredWidth
+        textView.layoutParams = params
+        params.width = textView5.measuredWidth
+        textView5.layoutParams = params
+        params.width = switch1.measuredWidth
+        switch1.layoutParams = params
+
+        if(textView5.text == "On" || textView5.text == "Play"){
+            switch1.isChecked = true
         }else{
-            view.switch1.isChecked = false
+            switch1.isChecked = false
         }
 
-        view.switch1.setOnCheckedChangeListener(object: CompoundButton.OnCheckedChangeListener {
+        switch1.setOnCheckedChangeListener(object: CompoundButton.OnCheckedChangeListener {
             @SuppressLint("SetTextI18n")
             override fun onCheckedChanged(buttonView:CompoundButton, isChecked:Boolean) {
-                if (view.switch1.isChecked) {
+                if (switch1.isChecked) {
                     when(lable){
-                        "đèn" -> {requestURL().execute("https://techitvn.com/home/api/remote.php?namedevice=light&id=" + arr.field1 + "&status=1&token=" + token)
-                            view.textView5.text = "On"
+                        "đèn" -> {requestURL().execute(UriApi(null,null, arr.field1.toInt(), 1).uriAPiRemote + token)
+                            textView5.text = "On"
                             //Toast.makeText(context, "Bật " + lable + " " + arr.field1, Toast.LENGTH_SHORT).show()
                         }
-                        "bài" -> {Toast.makeText(context, "Play " + lable + " " + arr.field1, Toast.LENGTH_SHORT).show();view.textView5.text = "Play"}
+                        "bài" -> {Toast.makeText(context, "Play " + lable + " " + arr.field1, Toast.LENGTH_SHORT).show(); textView5.text = "Play"}
                         else -> {
-                            view.textView5.text = "On"
+                            textView5.text = "On"
                             Toast.makeText(context,"Bật " + lable + " " + arr.field1, Toast.LENGTH_SHORT).show()
                         }
                     }
                 } else {
                     when(lable){
-                        "đèn" -> {requestURL().execute("https://techitvn.com/home/api/remote.php?namedevice=light&id=" + arr.field1 + "&status=0&token=" + token)
-                            view.textView5.text = "Off"
+                        "đèn" -> {requestURL().execute(UriApi(null,null, arr.field1.toInt(), 0).uriAPiRemote + token)
+                            textView5.text = "Off"
                             //Toast.makeText(context,"Tắt " + lable + " " + arr.field1, Toast.LENGTH_SHORT).show()
                         }
-                        "bài" -> {Toast.makeText(context, "Stop " + lable + " " + arr.field1, Toast.LENGTH_SHORT).show();view.textView5.text = "Stop"}
+                        "bài" -> {Toast.makeText(context, "Stop " + lable + " " + arr.field1, Toast.LENGTH_SHORT).show(); textView5.text = "Stop"}
                         else -> {
-                            view.textView5.text = "Off"
+                            textView5.text = "Off"
                             Toast.makeText(context,"Tắt " + lable + " " + arr.field1, Toast.LENGTH_SHORT).show()
                         }
                     }

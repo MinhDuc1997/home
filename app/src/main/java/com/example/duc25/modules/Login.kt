@@ -16,8 +16,7 @@ import java.io.InputStreamReader
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 import android.app.Activity
-
-
+import com.example.duc25.config.UriApi
 
 
 @SuppressLint("Registered")
@@ -27,7 +26,7 @@ class Login(val context: Context, val supportFragmentManager: android.support.v4
     fun checkLogin(username: String, password: String){
         if(i == 0) {
             //Toast.makeText(context, "Đang đăng nhập...", Toast.LENGTH_SHORT).show()
-            val uriApiLogin = "https://techitvn.com/home/api/login.php?username=$username&password=$password"
+            val uriApiLogin = UriApi(username, password, null, null).uriApiLogin
             ReadContentURL().execute(uriApiLogin)
             startFragment()
         }

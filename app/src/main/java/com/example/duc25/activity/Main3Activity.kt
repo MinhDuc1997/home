@@ -4,7 +4,10 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInfo
+import android.graphics.Point
+import android.graphics.Typeface
 import android.net.ConnectivityManager
+import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -16,7 +19,9 @@ import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
 import android.widget.Switch
+import android.widget.TextView
 import android.widget.Toast
+import com.example.duc25.config.UriApi
 import com.example.duc25.modules.HomeService
 import kotlinx.android.synthetic.main.activity_main3.*
 import kotlinx.android.synthetic.main.app_bar_main3.*
@@ -39,18 +44,21 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
     private var closeApp = 2
     private lateinit var packageInfo: PackageInfo
     private lateinit var versionName: String
+    var width = 0f
+    var height = 0f
+    lateinit var light_name: TextView
+    lateinit var light_status: TextView
+    lateinit var light_on_off: TextView
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main3)
         setSupportActionBar(toolbar)
-        list_view.visibility = View.GONE
-        light_name.text = ""
-        light_on_off.text = ""
-        light_status.text = ""
+        setSize()
+        setUI()
         getDataJson()
-        val uriApiMyhome: String = "https://techitvn.com/home/api/myhome.php?token=" + getToken()
+        val uriApiMyhome = UriApi(null, null, null, null).uriApiMyhome + getToken()
 
         swipeResfresh.setOnRefreshListener {
             swipeResfresh.isRefreshing = false
@@ -59,6 +67,54 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
         }
 
         ReadContentUri().execute(uriApiMyhome)
+    }
+
+    private fun setUI(){
+        list_view.visibility = View.GONE
+        light_name = TextView(this)
+        light_status = TextView(this)
+        light_on_off = TextView(this)
+
+        light_name.text = ""
+        light_on_off.text = ""
+        light_status.text = ""
+
+        light_name.textSize = 18f
+        light_status.textSize = 18f
+        light_on_off.textSize = 18f
+
+        light_name.y = height*5f
+        light_status.y = height*5f
+        light_on_off.y = height*5f
+
+        light_name.typeface = Typeface.DEFAULT_BOLD
+        light_status.typeface = Typeface.DEFAULT_BOLD
+        light_on_off.typeface = Typeface.DEFAULT_BOLD
+
+        light_name.setTextColor(resources.getColor(R.color.colorOrange1))
+        light_status.setTextColor(resources.getColor(R.color.colorOrange1))
+        light_on_off.setTextColor(resources.getColor(R.color.colorOrange1))
+
+        rl_main3.addView(light_name)
+        rl_main3.addView(light_status)
+        rl_main3.addView(light_on_off)
+    }
+
+    private fun updateUI(){
+        light_name.measure(0, 0)
+        light_status.measure(0,0)
+        light_on_off.measure(0, 0)
+        light_name.x = width*5
+        light_status.x = width*50 - light_status.measuredWidth/2
+        light_on_off.x = width*100 - light_on_off.measuredWidth - width*5
+    }
+
+    private fun setSize(){
+        val manager = windowManager.defaultDisplay
+        val size = Point()
+        manager.getSize(size)
+        width = size.x/100f
+        height = size.y/100f
     }
 
     private fun getDataJson(){
@@ -115,19 +171,20 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
 
                 }
                 list_view.adapter = CustomAdapter(this, R.layout.field_listview, arrayView, "đèn", getToken())
-                light_lable.visibility = View.GONE
+                process_update.visibility = View.GONE
                 light_name.text = "Đèn"
                 light_status.text = "Trạng thái"
                 light_on_off.text = "Công tắc"
                 title = "Đèn"
+                updateUI()
             }
             R.id.about -> {
                 list_view.visibility = View.GONE
-                light_lable.visibility = View.VISIBLE
+                process_update.visibility = View.VISIBLE
                 try {
                     packageInfo = packageManager.getPackageInfo(getPackageName(), 0)
                     versionName = packageInfo.versionName
-                    light_lable.text = "App Name: " + resources.getString(R.string.app_name) +
+                    process_update.text = "App Name: " + resources.getString(R.string.app_name) +
                             "\n Version: $versionName (private beta)" +
                             "\n Developer: Nguyen Minh Duc " +
                             "\n Team: " + resources.getString(R.string.textview8) +
@@ -156,16 +213,17 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
                         FieldValue("Not him","Stop", switchBtn)
                 )
                 list_view.adapter = CustomAdapter(this, R.layout.field_listview, arrayView, "bài", getToken())
-                light_lable.visibility = View.GONE
+                process_update.visibility = View.GONE
                 light_name.text = "Bài hát"
                 light_status.text = "Trạng thái"
                 light_on_off.text = "Chơi/Dừng"
                 title = "Chơi nhạc"
+                updateUI()
             }
             R.id.for_developer -> {
                 if(update == "updated") {
                     list_view.visibility = View.GONE
-                    light_lable.text = ""
+                    process_update.text = ""
                     light_name.text = ""
                     light_on_off.text = ""
                     light_status.text = ""
@@ -176,8 +234,8 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
                         temp += "id_light: $idLight, status: $status \n"
                     }
                     title = "Raw Json"
-                    light_lable.visibility = View.VISIBLE
-                    light_lable.text = jsonDataUser.toString() + "\n\n" + light.toString()
+                    process_update.visibility = View.VISIBLE
+                    process_update.text = jsonDataUser.toString() + "\n\n" + light.toString()
                     Toast.makeText(this, temp, Toast.LENGTH_LONG).show()
                 }
             }
@@ -256,8 +314,8 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
                     i.putExtra("content", getToken())
                     startService(i)
                     update = "updated"
-                    light_lable.visibility = View.VISIBLE
-                    light_lable.text = "Dữ liệu đã được cập nhật"
+                    process_update.visibility = View.VISIBLE
+                    process_update.text = "Dữ liệu đã được cập nhật"
 
                     val toggle = ActionBarDrawerToggle(
                             this@Main3Activity, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
@@ -268,11 +326,11 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
                     setInfo()
                 }
             }else if (values[0] == "No network"){
-                light_lable.text = "Không có kết nối mạng"
-                light_lable.setTextColor(resources.getColor(R.color.ColorSecondary))
+                process_update.text = "Không có kết nối mạng"
+                process_update.setTextColor(resources.getColor(R.color.ColorSecondary))
             }else{
-                light_lable.text = "Lỗi mạng"
-                light_lable.setTextColor(resources.getColor(R.color.ColorSecondary))
+                process_update.text = "Lỗi mạng"
+                process_update.setTextColor(resources.getColor(R.color.ColorSecondary))
             }
         }
     }

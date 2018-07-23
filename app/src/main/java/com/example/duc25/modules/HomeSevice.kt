@@ -10,6 +10,7 @@ import android.os.Handler
 import android.os.IBinder
 import android.util.Log
 import com.example.duc25.activity.Db
+import com.example.duc25.config.UriApi
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStream
@@ -33,10 +34,10 @@ class HomeService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if(intent !== null) {
             token = intent.getStringExtra("content")
-            uriApiMyhome = "https://techitvn.com/home/api/myhome.php?token=" + token
+            uriApiMyhome = UriApi(null, null, null, null).uriApiMyhome + token
             ReadContentURI().execute(uriApiMyhome)
         }else{
-            uriApiMyhome = "https://techitvn.com/home/api/myhome.php?token=" + token()
+            uriApiMyhome = UriApi(null, null, null, null).uriApiMyhome + token()
             ReadContentURI().execute(uriApiMyhome)
         }
 
