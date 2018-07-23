@@ -1,10 +1,12 @@
 package com.example.duc25.modules
 
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Build
 import android.support.v4.app.NotificationCompat
 import android.support.v4.app.NotificationManagerCompat
@@ -34,11 +36,13 @@ class HomeNotification(val context: Context) {
         //build notication
         val mBuilder = NotificationCompat.Builder(context, "home")
                 .setSmallIcon(R.drawable.ic_launcher_round)
-                .setContentTitle("Trạng thái")
+                //.setContentTitle("Trạng thái")
                 //.setContentText(data)
                 .setStyle(NotificationCompat.BigTextStyle().bigText(data))
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setColor(Color.parseColor("#fdc51162"))
+                .setPriority(NotificationCompat.DEFAULT_VIBRATE)
                 .setContentIntent(pendingIntent)
+                .setShowWhen(true)
                 .setOngoing(true)
 
         NotificationManagerCompat.from(context)
