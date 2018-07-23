@@ -1,4 +1,4 @@
-package com.example.duc25.activity
+package com.example.duc25.custom_adapter
 
 import android.widget.Switch
 

@@ -21,8 +21,10 @@ import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
 import com.example.duc25.config.UriApi
+import com.example.duc25.custom_adapter.CustomAdapter
+import com.example.duc25.custom_adapter.FieldValue
+import com.example.duc25.fragment.dialog.Confim
 import com.example.duc25.modules.HomeService
-import com.tapadoo.alerter.Alerter
 import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.activity_main3.*
 import kotlinx.android.synthetic.main.app_bar_main3.*
@@ -46,9 +48,9 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
     private lateinit var versionName: String
     var width = 0f
     var height = 0f
-    lateinit var light_name: TextView
-    lateinit var light_status: TextView
-    lateinit var light_on_off: TextView
+    private lateinit var light_name: TextView
+    private lateinit var light_status: TextView
+    private lateinit var light_on_off: TextView
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -182,7 +184,7 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
                 list_view.visibility = View.GONE
                 process_update.visibility = View.VISIBLE
                 try {
-                    packageInfo = packageManager.getPackageInfo(getPackageName(), 0)
+                    packageInfo = packageManager.getPackageInfo(packageName, 0)
                     versionName = packageInfo.versionName
                     process_update.text = "App Name: " + resources.getString(R.string.app_name) +
                             "\n Version: $versionName (private beta)" +
@@ -236,7 +238,7 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
                     title = "Raw Json"
                     process_update.visibility = View.VISIBLE
                     process_update.text = jsonDataUser.toString() + "\n\n" + light.toString()
-                    Toasty.success(this, temp, Toast.LENGTH_SHORT, true).show();
+                    Toasty.success(this, temp, Toast.LENGTH_SHORT, true).show()
                 }
             }
             R.id.logout -> {

@@ -1,19 +1,18 @@
-package com.example.duc25.activity
+package com.example.duc25.custom_adapter
 
 import android.annotation.SuppressLint
-import android.app.ActionBar
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Typeface
 import android.os.AsyncTask
 import android.support.v4.graphics.drawable.DrawableCompat
-import android.text.Layout
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import com.example.duc25.activity.Main3Activity
 import com.example.duc25.config.UriApi
 import com.tapadoo.alerter.Alerter
 import es.dmoral.toasty.Toasty
@@ -31,7 +30,7 @@ import javax.net.ssl.HttpsURLConnection
 
 class CustomAdapter (val context: Main3Activity, val layout: Int, val array: List<FieldValue>, val lable: String, val token: String): BaseAdapter() {
 
-    @SuppressLint("ViewHolder")
+    @SuppressLint("ViewHolder", "SetTextI18n")
     override fun getView(p0: Int, p1: View?, p2: ViewGroup?): View {
         val layout_dong = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
@@ -82,42 +81,31 @@ class CustomAdapter (val context: Main3Activity, val layout: Int, val array: Lis
         params.width = switch1.measuredWidth
         switch1.layoutParams = params
 
-        if(textView5.text == "On" || textView5.text == "Play"){
-            switch1.isChecked = true
-        }else{
-            switch1.isChecked = false
-        }
+        switch1.isChecked = textView5.text == "On" || textView5.text == "Play"
 
-        switch1.setOnCheckedChangeListener(object: CompoundButton.OnCheckedChangeListener {
-            @SuppressLint("SetTextI18n")
-            override fun onCheckedChanged(buttonView:CompoundButton, isChecked:Boolean) {
-                if (switch1.isChecked) {
-                    when(lable){
-                        "đèn" -> {requestURL().execute(UriApi(null,null, arr.field1.toInt(), 1).uriAPiRemote + token)
-                            textView5.text = "On"
-                            //Toast.makeText(context, "Bật " + lable + " " + arr.field1, Toast.LENGTH_SHORT).show()
-                        }
-                        "bài" -> {Toast.makeText(context, "Play " + lable + " " + arr.field1, Toast.LENGTH_SHORT).show(); textView5.text = "Play"}
-                        else -> {
-                            textView5.text = "On"
-                            Toast.makeText(context,"Bật " + lable + " " + arr.field1, Toast.LENGTH_SHORT).show()
-                        }
+        switch1.setOnCheckedChangeListener { _, _ ->
+            if (switch1.isChecked) {
+                when(lable){
+                    "đèn" -> {RequestURL().execute(UriApi(null,null, arr.field1.toInt(), 1).uriAPiRemote + token)
+                        textView5.text = "On"
                     }
-                } else {
-                    when(lable){
-                        "đèn" -> {requestURL().execute(UriApi(null,null, arr.field1.toInt(), 0).uriAPiRemote + token)
-                            textView5.text = "Off"
-                            //Toast.makeText(context,"Tắt " + lable + " " + arr.field1, Toast.LENGTH_SHORT).show()
-                        }
-                        "bài" -> {Toast.makeText(context, "Stop " + lable + " " + arr.field1, Toast.LENGTH_SHORT).show(); textView5.text = "Stop"}
-                        else -> {
-                            textView5.text = "Off"
-                            Toast.makeText(context,"Tắt " + lable + " " + arr.field1, Toast.LENGTH_SHORT).show()
-                        }
+                    "bài" -> {Toast.makeText(context, "Play " + lable + " " + arr.field1, Toast.LENGTH_SHORT).show(); textView5.text = "Play"}
+                    else -> {
+                        textView5.text = "On"
+                    }
+                }
+            } else {
+                when(lable){
+                    "đèn" -> {RequestURL().execute(UriApi(null,null, arr.field1.toInt(), 0).uriAPiRemote + token)
+                        textView5.text = "Off"
+                    }
+                    "bài" -> {Toast.makeText(context, "Stop " + lable + " " + arr.field1, Toast.LENGTH_SHORT).show(); textView5.text = "Stop"}
+                    else -> {
+                        textView5.text = "Off"
                     }
                 }
             }
-        })
+        }
         return view
     }
 
@@ -132,7 +120,7 @@ class CustomAdapter (val context: Main3Activity, val layout: Int, val array: Lis
     }
 
     @SuppressLint("StaticFieldLeak")
-    inner class requestURL : AsyncTask<String, Void, String>() {
+    inner class RequestURL : AsyncTask<String, Void, String>() {
 
         override fun doInBackground(vararg params: String?): String {
             val content = StringBuilder()

@@ -1,5 +1,6 @@
 package com.example.duc25.activity
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Point
@@ -13,8 +14,8 @@ import kotlinx.android.synthetic.main.activity_splash_activty.*
 
 class SplashActivty : AppCompatActivity() {
 
-    var width = 0f
-    var height = 0f
+    private var width = 0f
+    private var height = 0f
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +29,7 @@ class SplashActivty : AppCompatActivity() {
         },500)
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setUI(){
         val textView = TextView(this)
         val processBar  =ProgressBar(this, null, android.R.attr.progressBarStyleHorizontal)
@@ -49,7 +51,7 @@ class SplashActivty : AppCompatActivity() {
         processBar.x = width*50 - processBar.measuredWidth/2
         processBar.y = height*45
         processBar.isIndeterminate = true
-        processBar.getIndeterminateDrawable().setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.SRC_ATOP)
+        processBar.indeterminateDrawable.setColorFilter(Color.WHITE, android.graphics.PorterDuff.Mode.SRC_ATOP)
     }
 
     private fun setSize(){

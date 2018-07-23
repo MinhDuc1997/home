@@ -13,7 +13,6 @@ import com.example.duc25.activity.Db
 import com.example.duc25.config.UriApi
 import org.json.JSONObject
 import java.io.BufferedReader
-import java.io.InputStream
 import java.io.InputStreamReader
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
@@ -25,10 +24,6 @@ class HomeService : Service() {
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
-    }
-
-    override fun onCreate() {
-        super.onCreate()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -44,7 +39,7 @@ class HomeService : Service() {
         return START_STICKY
     }
 
-    fun token(): String{
+    private fun token(): String{
         token = ""
         try {
             val db = Db("", this)
@@ -62,7 +57,7 @@ class HomeService : Service() {
     inner class ReadContentURI : AsyncTask<String, String, String>() {
         lateinit var content:StringBuilder
 
-        fun getHttp(P0: String){
+        private fun getHttp(P0: String){
             content = StringBuilder()
             val url = URL(P0)
             val urlConnection = url.openConnection() as HttpsURLConnection
@@ -111,10 +106,10 @@ class HomeService : Service() {
                         for (i in 0 until jsonArr.length()) {
                             val id_light = jsonArr.getJSONObject(i).getString("id_light")
                             val status_light = jsonArr.getJSONObject(i).getString("status")
-                            if (status_light == "0")
-                                contentNotification += "Đèn $id_light: Tắt \n"
+                            contentNotification += if (status_light == "0")
+                                "Đèn $id_light: Tắt \n"
                             else
-                                contentNotification += "Đèn $id_light: Bật \n"
+                                "Đèn $id_light: Bật \n"
                         }
                         val notification = HomeNotification(this@HomeService)
                         notification.createNotificationChannel()

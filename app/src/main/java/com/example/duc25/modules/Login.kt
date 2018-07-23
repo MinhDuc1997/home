@@ -1,6 +1,6 @@
 @file:Suppress("DEPRECATION")
 
-package com.example.duc25.activity
+package com.example.duc25.modules
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -16,12 +16,15 @@ import java.io.InputStreamReader
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 import android.app.Activity
+import com.example.duc25.activity.Db
+import com.example.duc25.activity.Main3Activity
+import com.example.duc25.activity.R
 import com.example.duc25.config.UriApi
 import es.dmoral.toasty.Toasty
 
 
 @SuppressLint("Registered")
-class Login(val context: Context, val supportFragmentManager: android.support.v4.app.FragmentManager){
+class Login(val context: Context, private val supportFragmentManager: android.support.v4.app.FragmentManager){
     var i = 0
 
     fun checkLogin(username: String, password: String){
@@ -34,12 +37,12 @@ class Login(val context: Context, val supportFragmentManager: android.support.v4
         i++
     }
 
-    fun startFragment(){
+    private fun startFragment(){
         supportFragmentManager.beginTransaction().add(R.id.rl, Loading(), "loading")
                 .commit()
     }
 
-    fun removeFragment(){
+    private fun removeFragment(){
         supportFragmentManager.beginTransaction().remove(supportFragmentManager.findFragmentByTag("loading"))
                 .commit()
     }
@@ -47,7 +50,7 @@ class Login(val context: Context, val supportFragmentManager: android.support.v4
     @SuppressLint("StaticFieldLeak")
     inner class ReadContentURL : AsyncTask<String, String, String>() {
         lateinit var content: StringBuilder
-        fun getHttp(P0: String){
+        private fun getHttp(P0: String){
             try {
                 content = StringBuilder()
                 val url = URL(P0)
@@ -102,12 +105,12 @@ class Login(val context: Context, val supportFragmentManager: android.support.v4
                     saveData(content.toString())
                     toActivity(content.toString())
                 } else {
-                    Toasty.error(context, "Sai tên tài khoản hoặc mật khẩu", Toast.LENGTH_SHORT, true).show();
+                    Toasty.error(context, "Sai tên tài khoản hoặc mật khẩu", Toast.LENGTH_SHORT, true).show()
                     i = 0
                 }
             }else {
                 removeFragment()
-                Toasty.error(context, "Lỗi mạng", Toast.LENGTH_SHORT, true).show();
+                Toasty.error(context, "Lỗi mạng", Toast.LENGTH_SHORT, true).show()
                 i = 0
             }
         }

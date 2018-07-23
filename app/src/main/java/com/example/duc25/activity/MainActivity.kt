@@ -12,7 +12,6 @@ import android.graphics.Typeface
 import android.net.ConnectivityManager
 import android.os.AsyncTask
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.support.v7.app.AppCompatActivity
 import android.text.InputType
 import android.view.Gravity
@@ -20,10 +19,9 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import com.example.duc25.fragment.Loading
+import com.example.duc25.modules.Login
 import kotlinx.android.synthetic.main.activity_main.*
 import org.json.JSONObject
-import java.time.Instant
 import java.util.*
 import kotlin.concurrent.scheduleAtFixedRate
 
@@ -60,7 +58,7 @@ open class MainActivity: AppCompatActivity() {
         drawDevName()
     }
 
-    fun checkLogined(){
+    private fun checkLogined(){
         try {
             val obj = Db("", this)
             val result = obj.read()
@@ -100,10 +98,6 @@ open class MainActivity: AppCompatActivity() {
             finish()
         }
         return
-    }
-
-    override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
-        super.onSaveInstanceState(outState, outPersistentState)
     }
 
     @SuppressLint("StaticFieldLeak")

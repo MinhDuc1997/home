@@ -1,17 +1,17 @@
 <resources>
 
     <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="statusBarColor">@color/ColorSecondary</item>
-        <item name="colorPrimary">@color/ColorSecondary</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:statusBarColor">@color/ColorSecondary</item>
+        <item name="android:colorPrimary">@color/ColorSecondary</item>
     </style>
 
     <style name="switchThemse" parent="AppTheme.NoActionBar">
-        <item name="colorControlActivated">@color/ColorSecondary</item>
+        <item name="android:colorControlActivated">@color/ColorSecondary</item>
     </style>
     
     <style name="SplashTheme" parent="AppTheme.NoActionBar">
-        <item name="windowBackground">@color/ColorSecondary</item>
+        <item name="android:windowBackground">@color/ColorSecondary</item>
     </style>
 </resources>
