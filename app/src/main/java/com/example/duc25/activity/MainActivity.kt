@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Point
+import android.graphics.PorterDuff
 import android.graphics.Typeface
 import android.net.ConnectivityManager
 import android.os.AsyncTask
@@ -49,8 +50,8 @@ open class MainActivity: AppCompatActivity() {
         drawBtn()
         drawAppName()
         drawDevName()
-        username!!.setText("minhducc")
-        password!!.setText("01689470862")
+        username!!.setText("")
+        password!!.setText("")
         loginObj = Login(this, supportFragmentManager)
         CheckNet().execute("")
     }
@@ -191,6 +192,7 @@ open class MainActivity: AppCompatActivity() {
         userN.height = (height*7).toInt()
         userN.y = height*35
         userN.x = width*50 - ((width*50)/2)
+        userN.background.setColorFilter(resources.getColor(R.color.colorOrange1), PorterDuff.Mode.SRC_ATOP)
         username = userN
         rl.addView(username)
     }
@@ -209,6 +211,7 @@ open class MainActivity: AppCompatActivity() {
         userP.y = height*50
         userP.x = width*50 - ((width*50)/2)
         password = userP
+        userP.background.setColorFilter(resources.getColor(R.color.colorOrange1), PorterDuff.Mode.SRC_ATOP)
         rl.addView(password)
     }
 
