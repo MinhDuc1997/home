@@ -17,7 +17,7 @@ import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 import android.app.Activity
 import com.example.duc25.activity.Db
-import com.example.duc25.activity.Main3Activity
+import com.example.duc25.activity.HomeActivity
 import com.example.duc25.activity.R
 import com.example.duc25.config.UriApi
 import es.dmoral.toasty.Toasty
@@ -75,7 +75,7 @@ class Login(val context: Context, private val supportFragmentManager: android.su
         }
 
         private fun toActivity(data: String){
-            val intent = Intent(context, Main3Activity::class.java)
+            val intent = Intent(context, HomeActivity::class.java)
             intent.putExtra("json", data)
             context.startActivity(intent)
             (context as Activity).finish()

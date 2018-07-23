@@ -12,7 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import com.example.duc25.activity.Main3Activity
+import com.example.duc25.activity.HomeActivity
 import com.example.duc25.config.UriApi
 import com.tapadoo.alerter.Alerter
 import es.dmoral.toasty.Toasty
@@ -28,7 +28,7 @@ import javax.net.ssl.HttpsURLConnection
  * Created by duc25 on 1/16/2018.
  */
 
-class CustomAdapter (val context: Main3Activity, val layout: Int, val array: List<FieldValue>, val lable: String, val token: String): BaseAdapter() {
+class CustomAdapter (val context: HomeActivity, val layout: Int, val array: List<FieldValue>, val lable: String, val token: String): BaseAdapter() {
 
     @SuppressLint("ViewHolder", "SetTextI18n")
     override fun getView(p0: Int, p1: View?, p2: ViewGroup?): View {

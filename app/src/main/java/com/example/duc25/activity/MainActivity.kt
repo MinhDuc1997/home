@@ -65,7 +65,7 @@ open class MainActivity: AppCompatActivity() {
             val json = JSONObject(result)
             val status = json.getString("status_login")
             if (status == "true") {
-                val intent = Intent(this, Main3Activity::class.java)
+                val intent = Intent(this, HomeActivity::class.java)
                 intent.putExtra("json", json.toString())
                 startActivity(intent)
                 finish()

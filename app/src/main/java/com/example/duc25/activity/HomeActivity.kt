@@ -26,11 +26,11 @@ import com.example.duc25.custom_adapter.FieldValue
 import com.example.duc25.fragment.dialog.Confim
 import com.example.duc25.modules.HomeService
 import es.dmoral.toasty.Toasty
-import kotlinx.android.synthetic.main.activity_main3.*
-import kotlinx.android.synthetic.main.app_bar_main3.*
-import kotlinx.android.synthetic.main.content_main3.*
+import kotlinx.android.synthetic.main.activity_home.*
+import kotlinx.android.synthetic.main.app_bar_home.*
+import kotlinx.android.synthetic.main.content_home.*
 import kotlinx.android.synthetic.main.listview.*
-import kotlinx.android.synthetic.main.nav_header_main3.*
+import kotlinx.android.synthetic.main.nav_header_home.*
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -39,7 +39,7 @@ import javax.net.ssl.HttpsURLConnection
 
 
 @Suppress("DEPRECATION")
-open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+open class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var jsonDataUser: JSONObject
     lateinit var update: String
     lateinit var light: JSONObject
@@ -55,7 +55,7 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main3)
+        setContentView(R.layout.activity_home)
         setSupportActionBar(toolbar)
         setSize()
         setUI()
@@ -97,9 +97,9 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
         light_status.setTextColor(resources.getColor(R.color.colorOrange1))
         light_on_off.setTextColor(resources.getColor(R.color.colorOrange1))
 
-        rl_main3.addView(light_name)
-        rl_main3.addView(light_status)
-        rl_main3.addView(light_on_off)
+        rl_content_home.addView(light_name)
+        rl_content_home.addView(light_status)
+        rl_content_home.addView(light_on_off)
     }
 
     private fun updateUI(){
@@ -313,7 +313,7 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
                 light = obj
                 if (status == "true") {
                     //start service
-                    val i = Intent(this@Main3Activity, HomeService::class.java)
+                    val i = Intent(this@HomeActivity, HomeService::class.java)
                     i.putExtra("content", getToken())
                     startService(i)
 
@@ -322,10 +322,10 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
                     process_update.text = "Dữ liệu đã được cập nhật"
 
                     val toggle = ActionBarDrawerToggle(
-                            this@Main3Activity, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+                            this@HomeActivity, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
                     drawer_layout.addDrawerListener(toggle)
                     toggle.syncState()
-                    nav_view.setNavigationItemSelectedListener(this@Main3Activity)
+                    nav_view.setNavigationItemSelectedListener(this@HomeActivity)
                     drawer_layout.openDrawer(Gravity.LEFT)
                     setInfo()
                 }
