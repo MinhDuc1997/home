@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import es.dmoral.toasty.Toasty
 
 @SuppressLint("ValidFragment")
 /**
@@ -27,8 +28,8 @@ class Confim(val myContext: Context): DialogFragment(){
                 obj.delete()
                 val intent = Intent(myContext,MainActivity::class.java)
                 startActivity(intent)
-                Toast.makeText(myContext,"Đã đăng xuất", Toast.LENGTH_SHORT).show()
-                //finish(myContext)
+                Toasty.success(myContext, "Đã đăng xuất!", Toast.LENGTH_SHORT, true).show();
+                (myContext as Activity).finish()
             })
 
             setNegativeButton("Cancel", {dialog, id ->

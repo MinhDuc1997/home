@@ -7,7 +7,6 @@ import android.content.pm.PackageInfo
 import android.graphics.Point
 import android.graphics.Typeface
 import android.net.ConnectivityManager
-import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -23,6 +22,8 @@ import android.widget.TextView
 import android.widget.Toast
 import com.example.duc25.config.UriApi
 import com.example.duc25.modules.HomeService
+import com.tapadoo.alerter.Alerter
+import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.activity_main3.*
 import kotlinx.android.synthetic.main.app_bar_main3.*
 import kotlinx.android.synthetic.main.content_main3.*
@@ -30,7 +31,6 @@ import kotlinx.android.synthetic.main.listview.*
 import kotlinx.android.synthetic.main.nav_header_main3.*
 import org.json.JSONObject
 import java.io.BufferedReader
-import java.io.InputStream
 import java.io.InputStreamReader
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
@@ -83,9 +83,9 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
         light_status.textSize = 18f
         light_on_off.textSize = 18f
 
-        light_name.y = height*5f
-        light_status.y = height*5f
-        light_on_off.y = height*5f
+        light_name.y = height*7f
+        light_status.y = height*7f
+        light_on_off.y = height*7f
 
         light_name.typeface = Typeface.DEFAULT_BOLD
         light_status.typeface = Typeface.DEFAULT_BOLD
@@ -236,7 +236,7 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
                     title = "Raw Json"
                     process_update.visibility = View.VISIBLE
                     process_update.text = jsonDataUser.toString() + "\n\n" + light.toString()
-                    Toast.makeText(this, temp, Toast.LENGTH_LONG).show()
+                    Toasty.success(this, temp, Toast.LENGTH_SHORT, true).show();
                 }
             }
             R.id.logout -> {
@@ -310,9 +310,11 @@ open class Main3Activity : AppCompatActivity(), NavigationView.OnNavigationItemS
                 val status: String = obj.getString("status")
                 light = obj
                 if (status == "true") {
+                    //start service
                     val i = Intent(this@Main3Activity, HomeService::class.java)
                     i.putExtra("content", getToken())
                     startService(i)
+
                     update = "updated"
                     process_update.visibility = View.VISIBLE
                     process_update.text = "Dữ liệu đã được cập nhật"

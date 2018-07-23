@@ -15,6 +15,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.example.duc25.config.UriApi
+import com.tapadoo.alerter.Alerter
+import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.field_listview.view.*
 import org.json.JSONObject
 import java.io.BufferedReader
@@ -161,9 +163,15 @@ class CustomAdapter (val context: Main3Activity, val layout: Int, val array: Lis
             val jsonObj = JSONObject(result)
             val status = jsonObj.getString("status")
             if(status == "true"){
-                Toast.makeText(context, "Done", Toast.LENGTH_SHORT).show()
+                Alerter.create(context)
+                        .setTitle("Done")
+                        .setText("")
+                        .setBackgroundColorInt(Color.parseColor("#fdc51162"))
+                        .enableSwipeToDismiss()
+                        .show()
+                //Toasty.success(context, "Done", Toast.LENGTH_SHORT, true).show()
             }else{
-                Toast.makeText(context, "False", Toast.LENGTH_SHORT).show()
+                Toasty.error(context, "False", Toast.LENGTH_SHORT, true).show()
             }
         }
     }

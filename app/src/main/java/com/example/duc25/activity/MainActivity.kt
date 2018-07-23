@@ -40,6 +40,14 @@ open class MainActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        setUI()
+        username!!.setText("minhduc")
+        password!!.setText("")
+        loginObj = Login(this, supportFragmentManager)
+        CheckNet().execute("")
+    }
+
+    private fun setUI(){
         checkLogined()
         getSizeScreen()
         drawHeader()
@@ -50,10 +58,6 @@ open class MainActivity: AppCompatActivity() {
         drawBtn()
         drawAppName()
         drawDevName()
-        username!!.setText("")
-        password!!.setText("")
-        loginObj = Login(this, supportFragmentManager)
-        CheckNet().execute("")
     }
 
     fun checkLogined(){

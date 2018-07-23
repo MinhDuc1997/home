@@ -17,6 +17,7 @@ import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 import android.app.Activity
 import com.example.duc25.config.UriApi
+import es.dmoral.toasty.Toasty
 
 
 @SuppressLint("Registered")
@@ -101,12 +102,12 @@ class Login(val context: Context, val supportFragmentManager: android.support.v4
                     saveData(content.toString())
                     toActivity(content.toString())
                 } else {
-                    Toast.makeText(context, "Sai tên tài khoản hoặc mật khẩu", Toast.LENGTH_SHORT).show()
+                    Toasty.error(context, "Sai tên tài khoản hoặc mật khẩu", Toast.LENGTH_SHORT, true).show();
                     i = 0
                 }
             }else {
                 removeFragment()
-                Toast.makeText(context, "Lỗi mạng", Toast.LENGTH_SHORT).show()
+                Toasty.error(context, "Lỗi mạng", Toast.LENGTH_SHORT, true).show();
                 i = 0
             }
         }

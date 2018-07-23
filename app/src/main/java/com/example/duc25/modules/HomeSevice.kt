@@ -32,7 +32,7 @@ class HomeService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if(intent !== null) {
+        if(intent != null) {
             token = intent.getStringExtra("content")
             uriApiMyhome = UriApi(null, null, null, null).uriApiMyhome + token
             ReadContentURI().execute(uriApiMyhome)
@@ -123,12 +123,12 @@ class HomeService : Service() {
                     }
                 }
                 dataJson = values[0]!!
-                Handler().postDelayed({
-                    ReadContentURI().execute(uriApiMyhome)
-                }, 5000)
             }else{
 
             }
+            Handler().postDelayed({
+                ReadContentURI().execute(uriApiMyhome)
+            }, 5000)
         }
     }
 }
