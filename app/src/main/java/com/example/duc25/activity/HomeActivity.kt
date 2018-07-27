@@ -72,7 +72,7 @@ open class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
     }
 
     private fun setUI(){
-        list_view.visibility = View.GONE
+        swipeResfresh.visibility = View.GONE
         light_name = TextView(this)
         light_status = TextView(this)
         light_on_off = TextView(this)
@@ -156,7 +156,7 @@ open class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
 
         when (item.itemId) {
             R.id.nav_light -> {
-                list_view.visibility = View.VISIBLE
+                swipeResfresh.visibility = View.VISIBLE
                 val switchBtn = Switch(this)
 
                 var arrayView = listOf<FieldValue>()
@@ -181,7 +181,7 @@ open class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
                 updateUI()
             }
             R.id.about -> {
-                list_view.visibility = View.GONE
+                swipeResfresh.visibility = View.GONE
                 process_update.visibility = View.VISIBLE
                 try {
                     packageInfo = packageManager.getPackageInfo(packageName, 0)
@@ -199,7 +199,7 @@ open class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
                 title = "About"
             }
             R.id.nav_music -> {
-                list_view.visibility = View.VISIBLE
+                swipeResfresh.visibility = View.VISIBLE
                 val switchBtn = Switch(this)
 
                 val arrayView = listOf(
@@ -224,7 +224,7 @@ open class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
             }
             R.id.for_developer -> {
                 if(update == "updated") {
-                    list_view.visibility = View.GONE
+                    swipeResfresh.visibility = View.GONE
                     process_update.text = ""
                     light_name.text = ""
                     light_on_off.text = ""
