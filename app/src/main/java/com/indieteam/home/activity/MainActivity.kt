@@ -25,26 +25,28 @@ import com.indieteam.home.modules.Login
 import kotlinx.android.synthetic.main.activity_main.*
 import org.json.JSONObject
 import java.util.*
+import kotlin.concurrent.schedule
 import kotlin.concurrent.scheduleAtFixedRate
 
 open class MainActivity: AppCompatActivity() {
     private var width = 0f
     private var height = 0f
     private var closeApp = 2
-    private var loginObj: Login? = null
     private var username: EditText? = null
     private var password: EditText? = null
     private var btnlogin: Button? = null
+    private var checkNet = 0
+    var click = 0
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setUI()
-        username!!.setText("minhduc")
+        username!!.setText("")
         password!!.setText("")
-        loginObj = Login(this, supportFragmentManager)
         CheckNet().execute("")
+        event()
     }
 
     private fun setUI(){
@@ -79,7 +81,10 @@ open class MainActivity: AppCompatActivity() {
 
     fun event(){
         btnlogin!!.setOnClickListener {
-            loginObj!!.checkLogin(username!!.text.toString(), password!!.text.toString())
+            if(checkNet == 1 && click == 0)
+                Login(this, supportFragmentManager)
+                    .checkLogin(username!!.text.toString(), password!!.text.toString())
+            click++
         }
     }
 
@@ -104,21 +109,40 @@ open class MainActivity: AppCompatActivity() {
 
     @SuppressLint("StaticFieldLeak")
     inner class CheckNet : AsyncTask<String, String, String>() {
-        private var loop = 0
+
         override fun doInBackground(vararg params: String?): String {
             val timer = Timer()
-            timer.scheduleAtFixedRate(0, 500) {
+            timer.schedule(0, 500) {
                 val net = baseContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
                 val netInfo = net.activeNetworkInfo
-                if (netInfo != null && netInfo.isConnected) {
-                    if(loop == 0) {
-                        loop++
-                        event()
-                        publishProgress("isNet")
+                if(netInfo != null && netInfo.isConnected) {
+                    when (netInfo.type) {
+                        ConnectivityManager.TYPE_WIFI -> {
+                            if (netInfo.isConnected) {
+                                checkNet = 1
+                                publishProgress("isNet")
+                            } else {
+                                checkNet = 0
+                                publishProgress("")
+                            }
+                        }
+                        ConnectivityManager.TYPE_MOBILE -> {
+                            if (netInfo.isConnected) {
+                                checkNet = 1
+                                publishProgress("isNet")
+                            } else {
+                                checkNet = 0
+                                publishProgress("")
+                            }
+                        }
+                        else -> {
+                            checkNet = 1
+                            publishProgress("isNet")
+                        }
                     }
-                } else {
-                    loop = 0
-
+                }else{
+                    checkNet = 0
+                    click = 0
                     publishProgress("")
                 }
             }

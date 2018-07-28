@@ -1,6 +1,7 @@
 package com.indieteam.home.activity
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInfo
@@ -32,8 +33,10 @@ import kotlinx.android.synthetic.main.app_bar_home.*
 import kotlinx.android.synthetic.main.content_home.*
 import kotlinx.android.synthetic.main.listview.*
 import kotlinx.android.synthetic.main.nav_header_home.*
+import okhttp3.*
 import org.json.JSONObject
 import java.io.BufferedReader
+import java.io.IOException
 import java.io.InputStreamReader
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
@@ -52,6 +55,7 @@ open class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
     private lateinit var light_name: TextView
     private lateinit var light_status: TextView
     private lateinit var light_on_off: TextView
+    var isNet = -1
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,7 +73,13 @@ open class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
             finish()
         }
 
-        ReadContentUri().execute(uriApiMyhome)
+        rl_content_home.setOnClickListener {
+            if(isNet == 0) {
+                startActivity(intent)
+                finish()
+            }
+        }
+        Okhttp().request(uriApiMyhome)
     }
 
     private fun setUI(){
@@ -251,93 +261,49 @@ open class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         return true
     }
 
-    @SuppressLint("StaticFieldLeak")
-    inner class ReadContentUri : AsyncTask<String, String, String>() {
-        lateinit var content: StringBuilder
+    inner class Okhttp {
 
-        private fun getHttp(P0: String){
-            try {
-                content = StringBuilder()
-                val url = URL(P0)
-                val urlConnection = url.openConnection() as HttpsURLConnection
-                urlConnection.useCaches = false
-                val inputStream = urlConnection.inputStream
-                val inputStreamReader = InputStreamReader(inputStream)
-                val bufferedReader = BufferedReader(inputStreamReader)
+        private val client = OkHttpClient()
 
-                var line: String?
-                try {
-                    do {
-                        line = bufferedReader.readLine()
-                        if (line != null) {
-                            content.append(line)
+        fun request(url: String) {
+            val rq = Request.Builder()
+                    .url(url)
+                    .build()
+
+            client.newCall(rq).enqueue(object : Callback {
+                override fun onFailure(call: Call?, e: IOException?) {
+                    isNet = 0
+                    this@HomeActivity.runOnUiThread {
+                        process_update.text = "Lỗi mạng, chạm để thử lại"
+                        process_update.setTextColor(resources.getColor(R.color.ColorSecondary))                    }
+                }
+
+                override fun onResponse(call: Call?, response: Response?) {
+                    isNet = 1
+                    val body = JSONObject(response?.body()?.string())
+                    if (body.getString("status") == "true") {
+                        light = body
+                        //start service
+                        val i = Intent(this@HomeActivity, HomeService::class.java)
+                        i.putExtra("content", getToken())
+                        startService(i)
+
+                        //update view
+                        this@HomeActivity.runOnUiThread {
+                            update = "updated"
+                            process_update.visibility = View.VISIBLE
+                            process_update.text = "Dữ liệu đã được cập nhật"
+                            val toggle = ActionBarDrawerToggle(
+                                    this@HomeActivity, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
+                            drawer_layout.addDrawerListener(toggle)
+                            toggle.syncState()
+                            nav_view.setNavigationItemSelectedListener(this@HomeActivity)
+                            drawer_layout.openDrawer(Gravity.LEFT)
+                            setInfo()
                         }
-                    } while (line != null)
-                    bufferedReader.close()
-                } catch (e: Exception) {
-                    Log.d("ERROR", e.message)
-                }
-            }catch (e: Exception){}
-        }
-
-        override fun doInBackground(vararg params: String): String {
-            val net = baseContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-            val netInfo = net.activeNetworkInfo
-            if(netInfo != null && netInfo.isConnected) {
-                when (netInfo.type) {
-                    ConnectivityManager.TYPE_WIFI -> {
-                        getHttp(params[0])
-                        if(content.toString().isNotBlank())
-                            publishProgress(content.toString())
-                        else
-                            publishProgress("Error network")
                     }
-                    ConnectivityManager.TYPE_MOBILE -> {
-                        getHttp(params[0])
-                        if(content.toString().isNotBlank())
-                            publishProgress(content.toString())
-                        else
-                            publishProgress("Error network")
-                    }
-                    else -> publishProgress("Error network")
                 }
-            }else
-                publishProgress("No network")
-            return ""
-        }
-
-        @SuppressLint("SetTextI18n", "RtlHardcoded")
-        override fun onProgressUpdate(vararg values: String?) {
-            if(values[0] !== "No network" && values[0] !== "Error network" && values[0] != null) {
-                val obj = JSONObject(values[0])
-                val status: String = obj.getString("status")
-                light = obj
-                if (status == "true") {
-                    //start service
-                    val i = Intent(this@HomeActivity, HomeService::class.java)
-                    i.putExtra("content", getToken())
-                    startService(i)
-
-                    update = "updated"
-                    process_update.visibility = View.VISIBLE
-                    process_update.text = "Dữ liệu đã được cập nhật"
-
-                    val toggle = ActionBarDrawerToggle(
-                            this@HomeActivity, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
-                    drawer_layout.addDrawerListener(toggle)
-                    toggle.syncState()
-                    nav_view.setNavigationItemSelectedListener(this@HomeActivity)
-                    drawer_layout.openDrawer(Gravity.LEFT)
-                    setInfo()
-                }
-            }else if (values[0] == "No network"){
-                process_update.text = "Không có kết nối mạng"
-                process_update.setTextColor(resources.getColor(R.color.ColorSecondary))
-            }else{
-                process_update.text = "Lỗi mạng"
-                process_update.setTextColor(resources.getColor(R.color.ColorSecondary))
-            }
+            })
         }
     }
-
 }

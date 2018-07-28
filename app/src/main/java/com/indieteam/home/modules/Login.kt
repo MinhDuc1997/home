@@ -3,35 +3,30 @@
 package com.indieteam.home.modules
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.Intent
-import android.os.AsyncTask
-import android.util.Log
-import android.widget.Toast
-import com.indieteam.home.fragment.Loading
-import org.json.JSONObject
-import java.io.BufferedReader
-import java.io.InputStream
-import java.io.InputStreamReader
-import java.net.URL
-import javax.net.ssl.HttpsURLConnection
 import android.app.Activity
-import com.indieteam.home.modules.db.Db
-import com.indieteam.home.activity.HomeActivity
+import android.content.Intent
+import android.widget.Toast
 import com.example.duc25.activity.R
+import com.indieteam.home.activity.HomeActivity
+import com.indieteam.home.activity.MainActivity
 import com.indieteam.home.config.UriApi
+import com.indieteam.home.fragment.Loading
+import com.indieteam.home.modules.db.Db
 import es.dmoral.toasty.Toasty
+import okhttp3.*
+import org.json.JSONObject
+import java.io.IOException
 
 
 @SuppressLint("Registered")
-class Login(val context: Context, private val supportFragmentManager: android.support.v4.app.FragmentManager){
+class Login(val context: MainActivity, private val supportFragmentManager: android.support.v4.app.FragmentManager){
     var i = 0
 
     fun checkLogin(username: String, password: String){
         if(i == 0) {
             //Toast.makeText(context, "Đang đăng nhập...", Toast.LENGTH_SHORT).show()
             val uriApiLogin = UriApi(username, password, null, null).uriApiLogin
-            ReadContentURL().execute(uriApiLogin)
+            Okhttp().request(uriApiLogin).toString()
             startFragment()
         }
         i++
@@ -47,72 +42,50 @@ class Login(val context: Context, private val supportFragmentManager: android.su
                 .commit()
     }
 
-    @SuppressLint("StaticFieldLeak")
-    inner class ReadContentURL : AsyncTask<String, String, String>() {
-        lateinit var content: StringBuilder
-        private fun getHttp(P0: String){
-            try {
-                content = StringBuilder()
-                val url = URL(P0)
-                val urlConnection: HttpsURLConnection = url.openConnection() as HttpsURLConnection
-                val inputStream: InputStream = urlConnection.inputStream
-                val inputStreamReader = InputStreamReader(inputStream)
-                val bufferedReader = BufferedReader(inputStreamReader)
 
-                var line: String?
-                try {
-                    do {
-                        line = bufferedReader.readLine()
-                        if (line != null) {
-                            content.append(line)
+    private fun saveData(data: String){
+        val obj = Db(data, context)
+        obj.insert()
+    }
+
+    private fun toActivity(data: String){
+        val intent = Intent(context, HomeActivity::class.java)
+        intent.putExtra("json", data)
+        context.startActivity(intent)
+        (context as Activity).finish()
+    }
+
+    inner class Okhttp() {
+
+        private val client = OkHttpClient()
+
+        fun request(url: String) {
+            val rq = Request.Builder()
+                    .url(url)
+                    .build()
+
+            client.newCall(rq).enqueue(object : Callback {
+                override fun onFailure(call: Call?, e: IOException?) {
+                    context.runOnUiThread {
+                        Toasty.error(context, "Lỗi mạng", Toast.LENGTH_SHORT, true).show()
+                    }
+                }
+
+                override fun onResponse(call: Call?, response: Response?) {
+                    val body = JSONObject(response?.body()?.string())
+                    if(body.getString("status_login") == "true"){
+                        saveData(body.toString())
+                        toActivity(body.toString())
+                    }else{
+                        removeFragment()
+                        context.click = 0
+                        context.runOnUiThread {
+                            Toasty.error(context, "Sai tên tài khoản hoặc mật khẩu", Toast.LENGTH_SHORT, true).show()
                         }
-                    } while (line != null)
-                    bufferedReader.close()
-                } catch (e: Exception) {
-                    Log.d("ERROR", e.message)
+                    }
                 }
-            }catch (e: Exception){}
-        }
-
-        private fun toActivity(data: String){
-            val intent = Intent(context, HomeActivity::class.java)
-            intent.putExtra("json", data)
-            context.startActivity(intent)
-            (context as Activity).finish()
-        }
-
-        private fun saveData(data: String){
-            val obj = Db(data, context)
-            obj.insert()
-        }
-
-        override fun doInBackground(vararg params: String): String {
-            getHttp(params[0])
-            if(content.toString().isNotBlank())
-                publishProgress("")
-            else
-                publishProgress("Error network")
-            return ""
-        }
-
-        override fun onProgressUpdate(vararg values: String) {
-            super.onProgressUpdate(*values)
-            if(values[0] !== "Error network") {
-                val obj = JSONObject(content.toString())
-                val status: String = obj.getString("status_login")
-                removeFragment()
-                if (status == "true") {
-                    saveData(content.toString())
-                    toActivity(content.toString())
-                } else {
-                    Toasty.error(context, "Sai tên tài khoản hoặc mật khẩu", Toast.LENGTH_SHORT, true).show()
-                    i = 0
-                }
-            }else {
-                removeFragment()
-                Toasty.error(context, "Lỗi mạng", Toast.LENGTH_SHORT, true).show()
-                i = 0
-            }
+            })
         }
     }
+
 }

@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Home</string>
     <string name="btn_login">Đăng nhập</string>
-    <string name="pass"></string>
-    <string name="email"></string>
+    <string name="pass">""</string>
+    <string name="email">""</string>
     <string name="textview">Tài khoản</string>
     <string name="textview1">Mật khẩu</string>
 
@@ -22,7 +22,7 @@
     <string name="name">thiet bi</string>
     <string name="textview6">Home</string>
     <string name="textview8">IndieTeam</string>
-    <string name="whatnew">* Push notifications \n * New theme \n * Swipe down to refresh \n * Auto open menu</string>
+    <string name="whatnew">*Fix bug \n * Push notifications \n * New theme \n * Swipe down to refresh \n * Auto open menu</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

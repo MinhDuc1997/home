@@ -1,6 +1,7 @@
 package com.indieteam.home.custom_adapter
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -17,8 +18,10 @@ import com.indieteam.home.config.UriApi
 import com.tapadoo.alerter.Alerter
 import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.field_listview.view.*
+import okhttp3.*
 import org.json.JSONObject
 import java.io.BufferedReader
+import java.io.IOException
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.net.URL
@@ -86,20 +89,27 @@ class CustomAdapter (val context: HomeActivity, val layout: Int, val array: List
         switch1.setOnCheckedChangeListener { _, _ ->
             if (switch1.isChecked) {
                 when(lable){
-                    "đèn" -> {RequestURL().execute(UriApi(null,null, arr.field1.toInt(), 1).uriAPiRemote + token)
+                    "đèn" -> {
+                        Okhttp().request((UriApi(null,null, arr.field1.toInt(), 1).uriAPiRemote + token))
                         textView5.text = "On"
                     }
-                    "bài" -> {Toast.makeText(context, "Play " + lable + " " + arr.field1, Toast.LENGTH_SHORT).show(); textView5.text = "Play"}
+                    "bài" -> {
+                        Toast.makeText(context, "Play " + lable + " " + arr.field1, Toast.LENGTH_SHORT).show()
+                        textView5.text = "Play"
+                    }
                     else -> {
-                        textView5.text = "On"
                     }
                 }
             } else {
                 when(lable){
-                    "đèn" -> {RequestURL().execute(UriApi(null,null, arr.field1.toInt(), 0).uriAPiRemote + token)
+                    "đèn" -> {
+                        Okhttp().request((UriApi(null,null, arr.field1.toInt(), 0).uriAPiRemote + token))
                         textView5.text = "Off"
                     }
-                    "bài" -> {Toast.makeText(context, "Stop " + lable + " " + arr.field1, Toast.LENGTH_SHORT).show(); textView5.text = "Stop"}
+                    "bài" -> {
+                        Toast.makeText(context, "Stop " + lable + " " + arr.field1, Toast.LENGTH_SHORT).show()
+                        textView5.text = "Stop"
+                    }
                     else -> {
                         textView5.text = "Off"
                     }
@@ -119,48 +129,34 @@ class CustomAdapter (val context: HomeActivity, val layout: Int, val array: List
         return array.size
     }
 
-    @SuppressLint("StaticFieldLeak")
-    inner class RequestURL : AsyncTask<String, Void, String>() {
+    inner class Okhttp {
 
-        override fun doInBackground(vararg params: String?): String {
-            val content = StringBuilder()
-            val url = URL(params[0])
-            val urlConnection: HttpsURLConnection = url.openConnection() as HttpsURLConnection
-            val inputStream: InputStream = urlConnection.inputStream
-            val inputStreamReader = InputStreamReader(inputStream)
-            val bufferedReader = BufferedReader(inputStreamReader)
+        private val client = OkHttpClient()
 
-            var line: String?
-            try {
-                do {
-                    line = bufferedReader.readLine()
-                    if (line != null) {
-                        content.append(line)
+        fun request(url: String) {
+            val rq = Request.Builder()
+                    .url(url)
+                    .build()
+
+            client.newCall(rq).enqueue(object : Callback {
+                override fun onFailure(call: Call?, e: IOException?) {
+                    context.runOnUiThread {
+                        Toasty.error(context, "Lỗi mạng", Toast.LENGTH_SHORT, true).show()
                     }
-                } while (line != null)
-                bufferedReader.close()
-            } catch (e: Exception) {
-                Log.d("ERROR", e.message)
-            }
-            return content.toString()
-        }
+                }
 
-        @SuppressLint("SetTextI18n")
-        override fun onPostExecute(result: String?) {
-            super.onPostExecute(result)
-            val jsonObj = JSONObject(result)
-            val status = jsonObj.getString("status")
-            if(status == "true"){
-                Alerter.create(context)
-                        .setTitle("Done")
-                        .setText("")
-                        .setBackgroundColorInt(Color.parseColor("#fdc51162"))
-                        .enableSwipeToDismiss()
-                        .show()
-                //Toasty.success(context, "Done", Toast.LENGTH_SHORT, true).show()
-            }else{
-                Toasty.error(context, "False", Toast.LENGTH_SHORT, true).show()
-            }
+                override fun onResponse(call: Call?, response: Response?) {
+                    val body = JSONObject(response?.body()?.string())
+                    if(body.getString("status") == "true"){
+                        Alerter.create(context)
+                                .setTitle("Done")
+                                .setText("")
+                                .setBackgroundColorInt(Color.parseColor("#fdc51162"))
+                                .enableSwipeToDismiss()
+                                .show()
+                    }
+                }
+            })
         }
     }
 }
