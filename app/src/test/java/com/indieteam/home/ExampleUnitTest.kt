@@ -1,4 +1,4 @@
-package com.example.duc25.login
+package com.indieteam.login
 
 import org.junit.Test
 

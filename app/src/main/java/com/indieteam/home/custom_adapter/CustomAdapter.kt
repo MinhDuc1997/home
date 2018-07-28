@@ -1,4 +1,4 @@
-package com.example.duc25.custom_adapter
+package com.indieteam.home.custom_adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -12,8 +12,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import com.example.duc25.activity.HomeActivity
-import com.example.duc25.config.UriApi
+import com.indieteam.home.activity.HomeActivity
+import com.indieteam.home.config.UriApi
 import com.tapadoo.alerter.Alerter
 import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.field_listview.view.*

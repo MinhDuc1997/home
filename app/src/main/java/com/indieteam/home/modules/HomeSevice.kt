@@ -1,4 +1,4 @@
-package com.example.duc25.modules
+package com.indieteam.home.modules
 
 import android.annotation.SuppressLint
 import android.app.Service
@@ -9,8 +9,8 @@ import android.os.AsyncTask
 import android.os.Handler
 import android.os.IBinder
 import android.util.Log
-import com.example.duc25.activity.Db
-import com.example.duc25.config.UriApi
+import com.indieteam.home.modules.db.Db
+import com.indieteam.home.config.UriApi
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader

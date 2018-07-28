@@ -1,4 +1,4 @@
-package com.example.duc25.fragment.dialog
+package com.indieteam.home.fragment.dialog
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -9,8 +9,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
-import com.example.duc25.activity.Db
-import com.example.duc25.activity.MainActivity
+import com.indieteam.home.modules.db.Db
+import com.indieteam.home.activity.MainActivity
 import es.dmoral.toasty.Toasty
 
 @SuppressLint("ValidFragment")

@@ -1,4 +1,4 @@
-package com.example.duc25.fragment
+package com.indieteam.home.fragment
 
 import android.os.Bundle
 import android.support.v4.app.Fragment

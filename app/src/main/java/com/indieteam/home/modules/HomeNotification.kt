@@ -1,6 +1,5 @@
-package com.example.duc25.modules
+package com.indieteam.home.modules
 
-import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -10,7 +9,7 @@ import android.graphics.Color
 import android.os.Build
 import android.support.v4.app.NotificationCompat
 import android.support.v4.app.NotificationManagerCompat
-import com.example.duc25.activity.MainActivity
+import com.indieteam.home.activity.MainActivity
 import com.example.duc25.activity.R
 
 class HomeNotification(val context: Context) {
@@ -35,7 +34,7 @@ class HomeNotification(val context: Context) {
 
         //build notication
         val mBuilder = NotificationCompat.Builder(context, "home")
-                .setSmallIcon(R.drawable.ic_launcher_round)
+                .setSmallIcon(R.drawable.ic_app_ico)
                 //.setContentTitle("Trạng thái")
                 //.setContentText(data)
                 .setStyle(NotificationCompat.BigTextStyle().bigText(data))

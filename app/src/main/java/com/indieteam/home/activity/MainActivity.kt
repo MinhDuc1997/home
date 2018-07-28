@@ -1,6 +1,6 @@
 @file:Suppress("DEPRECATION")
 
-package com.example.duc25.activity
+package com.indieteam.home.activity
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -19,7 +19,9 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import com.example.duc25.modules.Login
+import com.indieteam.home.modules.db.Db
+import com.example.duc25.activity.R
+import com.indieteam.home.modules.Login
 import kotlinx.android.synthetic.main.activity_main.*
 import org.json.JSONObject
 import java.util.*

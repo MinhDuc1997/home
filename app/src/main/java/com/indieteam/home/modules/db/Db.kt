@@ -1,4 +1,4 @@
-package com.example.duc25.activity
+package com.indieteam.home.modules.db
 
 import android.annotation.SuppressLint
 import android.content.ContentValues

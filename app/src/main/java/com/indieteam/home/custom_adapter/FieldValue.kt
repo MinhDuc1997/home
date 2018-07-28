@@ -1,4 +1,4 @@
-package com.example.duc25.custom_adapter
+package com.indieteam.home.custom_adapter
 
 import android.widget.Switch
 

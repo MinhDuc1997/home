@@ -1,4 +1,4 @@
-package com.example.duc25.login
+package com.indieteam.home
 
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getTargetContext()
-        assertEquals("com.example.duc25.login", appContext.packageName)
+        assertEquals("com.indieteam.home", appContext.packageName)
     }
 }

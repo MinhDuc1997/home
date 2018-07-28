@@ -1,4 +1,4 @@
-package com.example.duc25.activity
+package com.indieteam.home.activity
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -10,6 +10,7 @@ import android.os.Handler
 import android.support.v7.app.AppCompatActivity
 import android.widget.ProgressBar
 import android.widget.TextView
+import com.example.duc25.activity.R
 import kotlinx.android.synthetic.main.activity_splash_activty.*
 
 class SplashActivty : AppCompatActivity() {

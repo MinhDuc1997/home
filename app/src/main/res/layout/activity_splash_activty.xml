@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.duc25.activity.SplashActivty"
+    tools:context="com.example.duc25.activity.com.indieteam.home.activity.SplashActivty"
     android:background="@color/colorOrange1"
     android:id="@+id/rl_splash">
 

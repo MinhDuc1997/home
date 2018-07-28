@@ -1,4 +1,4 @@
-package com.example.duc25.activity
+package com.indieteam.home.activity
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -20,11 +20,12 @@ import android.view.View
 import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
-import com.example.duc25.config.UriApi
-import com.example.duc25.custom_adapter.CustomAdapter
-import com.example.duc25.custom_adapter.FieldValue
-import com.example.duc25.fragment.dialog.Confim
-import com.example.duc25.modules.HomeService
+import com.example.duc25.activity.R
+import com.indieteam.home.config.UriApi
+import com.indieteam.home.custom_adapter.CustomAdapter
+import com.indieteam.home.custom_adapter.FieldValue
+import com.indieteam.home.fragment.dialog.Confim
+import com.indieteam.home.modules.HomeService
 import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.activity_home.*
 import kotlinx.android.synthetic.main.app_bar_home.*

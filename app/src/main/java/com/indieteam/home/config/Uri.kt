@@ -1,4 +1,4 @@
-package com.example.duc25.config
+package com.indieteam.home.config
 
 class UriApi(username: String?, password: String?, id: Int?, onoff: Int?) {
     val uriApiMyhome: String = "https://techitvn.com/home/api/myhome.php?token="

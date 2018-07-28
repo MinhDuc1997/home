@@ -1,6 +1,6 @@
 @file:Suppress("DEPRECATION")
 
-package com.example.duc25.modules
+package com.indieteam.home.modules
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -8,7 +8,7 @@ import android.content.Intent
 import android.os.AsyncTask
 import android.util.Log
 import android.widget.Toast
-import com.example.duc25.fragment.Loading
+import com.indieteam.home.fragment.Loading
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStream
@@ -16,10 +16,10 @@ import java.io.InputStreamReader
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 import android.app.Activity
-import com.example.duc25.activity.Db
-import com.example.duc25.activity.HomeActivity
+import com.indieteam.home.modules.db.Db
+import com.indieteam.home.activity.HomeActivity
 import com.example.duc25.activity.R
-import com.example.duc25.config.UriApi
+import com.indieteam.home.config.UriApi
 import es.dmoral.toasty.Toasty
 
 
