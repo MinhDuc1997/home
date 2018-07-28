@@ -72,6 +72,7 @@ class Login(val context: MainActivity, private val supportFragmentManager: andro
                 }
 
                 override fun onResponse(call: Call?, response: Response?) {
+                    removeFragment()
                     val body = JSONObject(response?.body()?.string())
                     if(body.getString("status_login") == "true"){
                         saveData(body.toString())
