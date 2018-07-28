@@ -10,8 +10,8 @@ android {
         applicationId "com.indieteam.home"
         minSdkVersion 23
         targetSdkVersion 27
-        versionCode 3
-        versionName "2.2"
+        versionCode 4
+        versionName "2.3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

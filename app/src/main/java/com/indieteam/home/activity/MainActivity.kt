@@ -83,7 +83,7 @@ open class MainActivity: AppCompatActivity() {
         btnlogin!!.setOnClickListener {
             if(checkNet == 1 && click == 0)
                 Login(this, supportFragmentManager)
-                    .checkLogin(username!!.text.toString(), password!!.text.toString())
+                        .checkLogin(username!!.text.toString(), password!!.text.toString())
             click++
         }
     }
@@ -280,4 +280,3 @@ open class MainActivity: AppCompatActivity() {
         rl.addView(devname)
     }
 }
-
