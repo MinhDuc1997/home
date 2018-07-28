@@ -1,20 +1,15 @@
 package com.indieteam.home.activity
 
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInfo
 import android.graphics.Point
 import android.graphics.Typeface
-import android.net.ConnectivityManager
-import android.os.AsyncTask
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
@@ -35,18 +30,14 @@ import kotlinx.android.synthetic.main.listview.*
 import kotlinx.android.synthetic.main.nav_header_home.*
 import okhttp3.*
 import org.json.JSONObject
-import java.io.BufferedReader
 import java.io.IOException
-import java.io.InputStreamReader
-import java.net.URL
-import javax.net.ssl.HttpsURLConnection
 
 
 @Suppress("DEPRECATION")
 open class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private lateinit var jsonDataUser: JSONObject
     lateinit var update: String
-    lateinit var light: JSONObject
+    lateinit var data: JSONObject
     private var closeApp = 2
     private lateinit var packageInfo: PackageInfo
     private lateinit var versionName: String
@@ -163,7 +154,7 @@ open class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
     @SuppressLint("SetTextI18n")
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         // Handle navigation view item clicks here.
-        val jsonArr = light.getJSONArray("light_status")
+        val jsonArr = data.getJSONArray("light_status")
 
         when (item.itemId) {
             R.id.nav_light -> {
@@ -248,7 +239,7 @@ open class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
                     }
                     title = "Raw Json"
                     process_update.visibility = View.VISIBLE
-                    process_update.text = jsonDataUser.toString() + "\n\n" + light.toString()
+                    process_update.text = jsonDataUser.toString() + "\n\n" + data.toString()
                     Toasty.success(this, temp, Toast.LENGTH_SHORT, true).show()
                 }
             }
@@ -282,7 +273,7 @@ open class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
                     isNet = 1
                     val body = JSONObject(response?.body()?.string())
                     if (body.getString("status") == "true") {
-                        light = body
+                        data = body
                         //start service
                         val i = Intent(this@HomeActivity, HomeService::class.java)
                         i.putExtra("content", getToken())

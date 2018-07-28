@@ -6,9 +6,7 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Typeface
-import android.os.AsyncTask
 import android.support.v4.graphics.drawable.DrawableCompat
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,16 +18,7 @@ import es.dmoral.toasty.Toasty
 import kotlinx.android.synthetic.main.field_listview.view.*
 import okhttp3.*
 import org.json.JSONObject
-import java.io.BufferedReader
 import java.io.IOException
-import java.io.InputStream
-import java.io.InputStreamReader
-import java.net.URL
-import javax.net.ssl.HttpsURLConnection
-
-/**
- * Created by duc25 on 1/16/2018.
- */
 
 class CustomAdapter (val context: HomeActivity, val layout: Int, val array: List<FieldValue>, val lable: String, val token: String): BaseAdapter() {
 
@@ -148,12 +137,36 @@ class CustomAdapter (val context: HomeActivity, val layout: Int, val array: List
                 override fun onResponse(call: Call?, response: Response?) {
                     val body = JSONObject(response?.body()?.string())
                     if(body.getString("status") == "true"){
+                        Okhttp_().request(UriApi(null, null, null, null).uriApiMyhome+token)
                         Alerter.create(context)
                                 .setTitle("Done")
                                 .setText("")
                                 .setBackgroundColorInt(Color.parseColor("#fdc51162"))
                                 .enableSwipeToDismiss()
                                 .show()
+                    }
+                }
+            })
+        }
+    }
+
+    inner class Okhttp_{
+
+        private val client = OkHttpClient()
+
+        fun request(url: String) {
+            val rq = Request.Builder()
+                    .url(url)
+                    .build()
+
+            client.newCall(rq).enqueue(object : Callback {
+                override fun onFailure(call: Call?, e: IOException?) {
+                }
+
+                override fun onResponse(call: Call?, response: Response?) {
+                    val body = JSONObject(response?.body()?.string())
+                    if(body.getString("status") == "true"){
+                        context.data = body
                     }
                 }
             })
