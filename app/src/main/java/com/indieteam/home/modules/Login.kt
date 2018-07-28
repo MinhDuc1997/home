@@ -20,16 +20,12 @@ import java.io.IOException
 
 @SuppressLint("Registered")
 class Login(val context: MainActivity, private val supportFragmentManager: android.support.v4.app.FragmentManager){
-    var i = 0
 
     fun checkLogin(username: String, password: String){
-        if(i == 0) {
-            //Toast.makeText(context, "Đang đăng nhập...", Toast.LENGTH_SHORT).show()
-            val uriApiLogin = UriApi(username, password, null, null).uriApiLogin
-            Okhttp().request(uriApiLogin).toString()
-            startFragment()
-        }
-        i++
+        startFragment()
+        //Toast.makeText(context, "Đang đăng nhập...", Toast.LENGTH_SHORT).show()
+        val uriApiLogin = UriApi(username, password, null, null).uriApiLogin
+        Okhttp().request(uriApiLogin).toString()
     }
 
     private fun startFragment(){
@@ -55,7 +51,7 @@ class Login(val context: MainActivity, private val supportFragmentManager: andro
         (context as Activity).finish()
     }
 
-    inner class Okhttp() {
+    inner class Okhttp {
 
         private val client = OkHttpClient()
 
@@ -78,7 +74,6 @@ class Login(val context: MainActivity, private val supportFragmentManager: andro
                         saveData(body.toString())
                         toActivity(body.toString())
                     }else{
-                        removeFragment()
                         context.click = 0
                         context.runOnUiThread {
                             Toasty.error(context, "Sai tên tài khoản hoặc mật khẩu", Toast.LENGTH_SHORT, true).show()
